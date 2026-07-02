@@ -1,0 +1,78 @@
+<?php
+
+namespace Database\Factories;
+
+use App\Models\Breed;
+use App\Models\Organization;
+use App\Models\Pet;
+use App\Models\Species;
+use App\Models\User;
+use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Str;
+
+class PetFactory extends Factory
+{
+    protected $model = Pet::class;
+
+    public function definition(): array
+    {
+        $species = Species::inRandomOrder()->first() ?? Species::factory();
+        $breed = Breed::where('species_id', $species->id)->inRandomOrder()->first();
+
+        $name = fake()->firstName();
+
+        return [
+            'name' => $name,
+            'slug' => fn() => Str::slug($name . '-' . Str::random(6)),
+            'species_id' => $species->id,
+            'breed_id' => $breed?->id,
+            'age_years' => fake()->optional(0.7)->numberBetween(0, 12),
+            'age_months' => fake()->optional(0.5)->numberBetween(1, 11),
+            'size' => fake()->randomElement(['small', 'medium', 'large']),
+            'color' => fake()->optional()->safeColorName(),
+            'description' => fake()->paragraphs(2, true),
+            'status' => 'available',
+            'organization_id' => Organization::factory(),
+            'user_id' => User::factory(),
+            'is_vaccinated' => fake()->boolean(),
+            'is_neutered' => fake()->boolean(),
+            'is_house_trained' => fake()->boolean(),
+            'good_with_kids' => fake()->optional(0.7)->boolean(),
+            'good_with_pets' => fake()->optional(0.7)->boolean(),
+        ];
+    }
+
+    public function adopted(): static
+    {
+        return $this->state(fn(array $attrs) => ['status' => 'adopted']);
+    }
+
+    public function dog(): static
+    {
+        return $this->state(fn(array $attrs) => [
+            'species_id' => Species::where('slug', 'perro')->first()?->id ?? 1,
+        ]);
+    }
+
+    public function cat(): static
+    {
+        return $this->state(fn(array $attrs) => [
+            'species_id' => Species::where('slug', 'gato')->first()?->id ?? 2,
+        ]);
+    }
+
+    public function small(): static
+    {
+        return $this->state(fn(array $attrs) => ['size' => 'small']);
+    }
+
+    public function medium(): static
+    {
+        return $this->state(fn(array $attrs) => ['size' => 'medium']);
+    }
+
+    public function large(): static
+    {
+        return $this->state(fn(array $attrs) => ['size' => 'large']);
+    }
+}
