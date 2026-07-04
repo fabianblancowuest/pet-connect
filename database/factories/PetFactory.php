@@ -5,6 +5,7 @@ namespace Database\Factories;
 use App\Models\Breed;
 use App\Models\Organization;
 use App\Models\Pet;
+use App\Models\PetImage;
 use App\Models\Species;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -16,7 +17,12 @@ class PetFactory extends Factory
 
     public function definition(): array
     {
-        $species = Species::inRandomOrder()->first() ?? Species::factory();
+        $species = Species::inRandomOrder()->first();
+
+        if (!$species) {
+            $species = (object) ['id' => fake()->randomElement([1, 2])];
+        }
+
         $breed = Breed::where('species_id', $species->id)->inRandomOrder()->first();
 
         $name = fake()->firstName();
@@ -74,5 +80,27 @@ class PetFactory extends Factory
     public function large(): static
     {
         return $this->state(fn(array $attrs) => ['size' => 'large']);
+    }
+
+    public function withImages(int $count = 3): static
+    {
+        return $this->afterCreating(function (Pet $pet) use ($count) {
+            $speciesSlug = $pet->species?->slug === 'gato' ? 'cat' : 'dog';
+
+            PetImage::factory()->{$speciesSlug}()->primary()->create([
+                'pet_id' => $pet->id,
+                'image_path' => match ($speciesSlug) {
+                    'cat' => 'https://loremflickr.com/640/480/cat?lock=' . $pet->id,
+                    default => 'https://loremflickr.com/640/480/dog?lock=' . $pet->id,
+                },
+            ]);
+
+            for ($i = 1; $i < $count; $i++) {
+                PetImage::factory()->{$speciesSlug}()->create([
+                    'pet_id' => $pet->id,
+                    'sort_order' => $i,
+                ]);
+            }
+        });
     }
 }

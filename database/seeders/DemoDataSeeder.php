@@ -30,32 +30,32 @@ class DemoDataSeeder extends Seeder
             'province' => 'CABA',
         ]);
 
-        Pet::factory()->dog()->small()->count(4)->create([
+        Pet::factory()->dog()->small()->withImages(3)->count(4)->create([
             'organization_id' => $org->id,
             'user_id' => $rescuer->id,
         ]);
 
-        Pet::factory()->dog()->medium()->count(3)->create([
+        Pet::factory()->dog()->medium()->withImages(3)->count(3)->create([
             'organization_id' => $org->id,
             'user_id' => $rescuer->id,
         ]);
 
-        Pet::factory()->dog()->large()->count(2)->create([
+        Pet::factory()->dog()->large()->withImages(3)->count(2)->create([
             'organization_id' => $org->id,
             'user_id' => $rescuer->id,
         ]);
 
-        Pet::factory()->cat()->small()->count(3)->create([
+        Pet::factory()->cat()->small()->withImages(3)->count(3)->create([
             'organization_id' => $org->id,
             'user_id' => $rescuer->id,
         ]);
 
-        Pet::factory()->cat()->medium()->count(2)->create([
+        Pet::factory()->cat()->medium()->withImages(3)->count(2)->create([
             'organization_id' => $org->id,
             'user_id' => $rescuer->id,
         ]);
 
-        Pet::factory()->adopted()->count(3)->create([
+        Pet::factory()->adopted()->withImages(2)->count(3)->create([
             'organization_id' => $org->id,
             'user_id' => $rescuer->id,
         ]);
