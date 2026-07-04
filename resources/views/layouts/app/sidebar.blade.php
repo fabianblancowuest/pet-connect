@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="dark">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
         @include('partials.head')
     </head>
@@ -55,6 +55,19 @@
                 <flux:sidebar.group class="grid">
                     <flux:sidebar.item icon="cog" :href="route('profile.edit')" :current="request()->routeIs('profile.edit')" wire:navigate>
                         {{ __('Configuración') }}
+                    </flux:sidebar.item>
+                    <flux:sidebar.item class="cursor-pointer" x-data="{ dark: document.documentElement.classList.contains('dark') }" x-on:click="
+                        dark = !dark;
+                        localStorage.setItem('flux.appearance', dark ? 'dark' : 'light');
+                        document.documentElement.classList.toggle('dark');
+                    ">
+                        <template x-if="dark">
+                            <flux:icon name="sun" class="size-5" />
+                        </template>
+                        <template x-if="!dark">
+                            <flux:icon name="moon" class="size-5" />
+                        </template>
+                        <span x-text="dark ? 'Modo claro' : 'Modo oscuro'"></span>
                     </flux:sidebar.item>
                 </flux:sidebar.group>
             </flux:sidebar.nav>

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="dark">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -9,6 +9,7 @@
         <link rel="apple-touch-icon" href="/apple-touch-icon.png">
         @fonts
         @vite(['resources/css/app.css', 'resources/js/app.js'])
+        @fluxAppearance
     </head>
     <body class="min-h-screen bg-white dark:bg-zinc-900">
         <header class="sticky top-0 z-50 border-b border-zinc-200/60 bg-white/80 backdrop-blur-xl dark:border-zinc-800/60 dark:bg-zinc-900/80">
@@ -23,6 +24,25 @@
                 </a>
 
                 <nav class="flex items-center gap-3">
+                    <button
+                        type="button"
+                        class="flex size-9 items-center justify-center rounded-lg text-zinc-500 transition-colors hover:bg-zinc-100 hover:text-zinc-700 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-200"
+                        x-data="{ dark: document.documentElement.classList.contains('dark') }"
+                        x-on:click="
+                            dark = !dark;
+                            localStorage.setItem('flux.appearance', dark ? 'dark' : 'light');
+                            document.documentElement.classList.toggle('dark');
+                        "
+                        :title="dark ? 'Modo claro' : 'Modo oscuro'"
+                    >
+                        <template x-if="dark">
+                            <flux:icon name="sun" class="size-5" />
+                        </template>
+                        <template x-if="!dark">
+                            <flux:icon name="moon" class="size-5" />
+                        </template>
+                    </button>
+
                     @auth
                         <flux:button :href="route('dashboard')" wire:navigate variant="primary">
                             {{ __('Dashboard') }}
