@@ -63,6 +63,11 @@ class PetCatalog extends Component
         $this->resetPage();
     }
 
+    public function redirectToDetail(int $petId): void
+    {
+        $this->redirect(route('pets.detail', Pet::findOrFail($petId)), navigate: true);
+    }
+
     #[Computed]
     public function speciesList()
     {

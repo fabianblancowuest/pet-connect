@@ -1,0 +1,117 @@
+<div>
+    <div class="mb-6 flex items-center justify-between">
+        <flux:heading size="xl" level="1">{{ __('Solicitudes de adopción') }}</flux:heading>
+        <flux:select wire:model.live="statusFilter" class="w-40">
+            <option value="">{{ __('Todas') }}</option>
+            <option value="pending">{{ __('Pendientes') }}</option>
+            <option value="approved">{{ __('Aprobadas') }}</option>
+            <option value="rejected">{{ __('Rechazadas') }}</option>
+        </flux:select>
+    </div>
+
+    @if ($this->requests->isEmpty())
+        <div class="flex flex-col items-center justify-center py-16 text-center">
+            <flux:icon name="inbox" class="mb-4 size-12 text-neutral-300 dark:text-neutral-600" />
+            <flux:heading class="mb-2 text-lg">{{ __('No hay solicitudes') }}</flux:heading>
+            <flux:text>{{ __('Aún no recibiste solicitudes de adopción.') }}</flux:text>
+        </div>
+    @else
+        <div class="space-y-4">
+            @foreach ($this->requests as $request)
+                <div class="rounded-xl border border-neutral-200 bg-white p-4 dark:border-neutral-700 dark:bg-zinc-800">
+                    <div class="flex items-start gap-4">
+                        <div class="aspect-square size-16 shrink-0 overflow-hidden rounded-lg bg-neutral-100 dark:bg-zinc-700">
+                            @if ($request->pet->primaryImage)
+                                <img src="{{ $request->pet->primaryImage->image_path }}" alt="" class="size-full object-cover" />
+                            @else
+                                <div class="flex size-full items-center justify-center text-neutral-400">
+                                    <flux:icon name="image" class="size-6" />
+                                </div>
+                            @endif
+                        </div>
+
+                        <div class="flex-1 min-w-0">
+                            <div class="flex items-start justify-between gap-2">
+                                <div>
+                                    <flux:heading class="text-base">{{ $request->pet->name }}</flux:heading>
+                                    <flux:text class="text-sm">
+                                        {{ $request->user->name }} &middot;
+                                        <a href="mailto:{{ $request->user->email }}" class="hover:underline">{{ $request->user->email }}</a>
+                                    </flux:text>
+                                </div>
+                                <flux:badge
+                                    size="sm"
+                                    color="{{ $request->status === 'pending' ? 'amber' : ($request->status === 'approved' ? 'emerald' : 'red') }}"
+                                >
+                                    {{ $request->status === 'pending' ? __('Pendiente') : ($request->status === 'approved' ? __('Aprobada') : __('Rechazada')) }}
+                                </flux:badge>
+                            </div>
+
+                            <p class="mt-2 text-sm text-neutral-600 dark:text-neutral-300">
+                                {{ $request->message }}
+                            </p>
+
+                            <div class="mt-3 flex items-center gap-2 text-xs text-neutral-400">
+                                <span>{{ $request->created_at->isoFormat('LL') }}</span>
+                                @if ($request->notes)
+                                    <span>&middot;</span>
+                                    <flux:icon name="file-text" class="size-3" />
+                                    <span>{{ __('Tiene notas') }}</span>
+                                @endif
+                            </div>
+
+                            @if ($request->status === 'pending')
+                                <div class="mt-3 flex gap-2">
+                                    <flux:button
+                                        wire:click="approve({{ $request->id }})"
+                                        variant="primary"
+                                        size="xs"
+                                        wire:confirm="{{ __('¿Aprobar esta solicitud?') }}"
+                                    >
+                                        {{ __('Aprobar') }}
+                                    </flux:button>
+                                    <flux:button
+                                        wire:click="reject({{ $request->id }})"
+                                        variant="danger"
+                                        size="xs"
+                                        wire:confirm="{{ __('¿Rechazar esta solicitud?') }}"
+                                    >
+                                        {{ __('Rechazar') }}
+                                    </flux:button>
+                                    <flux:button
+                                        wire:click="editNotes({{ $request->id }})"
+                                        variant="ghost"
+                                        size="xs"
+                                    >
+                                        {{ __('Notas') }}
+                                    </flux:button>
+                                </div>
+                            @endif
+                        </div>
+                    </div>
+
+                    @if ($selectedRequestId === $request->id)
+                        <div class="mt-4 border-t border-neutral-200 pt-4 dark:border-neutral-700">
+                            <form wire:submit="saveNotes" class="flex gap-2">
+                                <flux:textarea
+                                    wire:model="notes"
+                                    :label="__('Notas internas')"
+                                    rows="2"
+                                    class="flex-1"
+                                />
+                                <div class="flex items-end gap-2">
+                                    <flux:button type="submit" variant="primary" size="sm">
+                                        {{ __('Guardar') }}
+                                    </flux:button>
+                                    <flux:button wire:click="$set('selectedRequestId', null)" variant="ghost" size="sm">
+                                        {{ __('Cerrar') }}
+                                    </flux:button>
+                                </div>
+                            </form>
+                        </div>
+                    @endif
+                </div>
+            @endforeach
+        </div>
+    @endif
+</div>
