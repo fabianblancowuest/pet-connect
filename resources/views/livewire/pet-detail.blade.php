@@ -145,7 +145,7 @@
                         variant="primary"
                         class="w-full"
                         x-data=""
-                        x-on:click.prevent="$dispatch('open-modal', 'adoption-form')"
+                        x-on:click.prevent="$dispatch('modal-show', { name: 'adoption-form' })"
                     >
                         {{ __('Solicitar adopción') }}
                     </flux:button>
