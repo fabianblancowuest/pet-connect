@@ -55,16 +55,22 @@ class PetFactory extends Factory
 
     public function dog(): static
     {
-        return $this->state(fn(array $attrs) => [
-            'species_id' => Species::where('slug', 'perro')->first()?->id ?? 1,
-        ]);
+        return $this->state(function (array $attrs) {
+            static $speciesId = null;
+            $speciesId ??= Species::where('slug', 'perro')->first()?->id ?? 1;
+
+            return ['species_id' => $speciesId];
+        });
     }
 
     public function cat(): static
     {
-        return $this->state(fn(array $attrs) => [
-            'species_id' => Species::where('slug', 'gato')->first()?->id ?? 2,
-        ]);
+        return $this->state(function (array $attrs) {
+            static $speciesId = null;
+            $speciesId ??= Species::where('slug', 'gato')->first()?->id ?? 2;
+
+            return ['species_id' => $speciesId];
+        });
     }
 
     public function small(): static

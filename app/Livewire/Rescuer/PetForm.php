@@ -6,6 +6,8 @@ use App\Models\Breed;
 use App\Models\Pet;
 use App\Models\Species;
 use Flux\Flux;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rule;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
@@ -70,7 +72,6 @@ class PetForm extends Component
             $this->is_house_trained = $pet->is_house_trained;
             $this->good_with_kids = $pet->good_with_kids;
             $this->good_with_pets = $pet->good_with_pets;
-            $this->breed_id = $pet->breed_id;
         }
     }
 
@@ -79,7 +80,10 @@ class PetForm extends Component
         return [
             'name' => 'required|string|max:255',
             'species_id' => 'required|exists:species,id',
-            'breed_id' => 'nullable|exists:breeds,id',
+            'breed_id' => [
+                'nullable',
+                Rule::exists('breeds', 'id')->where(fn ($q) => $q->where('species_id', $this->species_id)),
+            ],
             'age_years' => 'nullable|integer|min:0|max:50',
             'age_months' => 'nullable|integer|min:0|max:11',
             'size' => 'required|in:small,medium,large',
@@ -144,6 +148,9 @@ class PetForm extends Component
         ];
 
         if ($this->editing) {
+            $orgIds = auth()->user()->organizations()->pluck('id');
+            abort_unless($orgIds->contains($this->pet->organization_id), 403);
+
             $this->pet->update($data);
             Flux::toast(variant: 'success', text: __('Mascota actualizada.'));
         } else {
@@ -157,7 +164,7 @@ class PetForm extends Component
             $path = $image->store('pets', 'public');
             $isPrimary = !$this->pet->images()->exists();
             $this->pet->images()->create([
-                'image_path' => '/storage/' . $path,
+                'image_path' => Storage::url($path),
                 'is_primary' => $isPrimary,
                 'sort_order' => $this->pet->images()->count(),
             ]);

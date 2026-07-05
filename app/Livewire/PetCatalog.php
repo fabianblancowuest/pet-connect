@@ -63,9 +63,9 @@ class PetCatalog extends Component
         $this->resetPage();
     }
 
-    public function redirectToDetail(int $petId): void
+    public function redirectToDetail(string $slug): void
     {
-        $this->redirect(route('pets.detail', Pet::findOrFail($petId)), navigate: true);
+        $this->redirect(route('pets.detail', Pet::where('slug', $slug)->firstOrFail()), navigate: true);
     }
 
     #[Computed]

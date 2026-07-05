@@ -31,7 +31,7 @@ class Organization extends Model
     protected static function booted(): void
     {
         static::creating(function (Organization $organization) {
-            $organization->slug = $organization->slug ?? Str::slug($organization->name);
+            $organization->slug = $organization->slug ?? Str::slug($organization->name . '-' . Str::random(6));
         });
     }
 

@@ -25,6 +25,21 @@ class CreateRequest extends Component
     {
         $this->validate();
 
+        if ($this->pet->status !== 'available') {
+            Flux::toast(variant: 'error', text: __('Esta mascota ya no está disponible para adopción.'));
+            return;
+        }
+
+        $existing = auth()->user()->adoptionRequests()
+            ->where('pet_id', $this->pet->id)
+            ->whereIn('status', ['pending', 'approved'])
+            ->exists();
+
+        if ($existing) {
+            Flux::toast(variant: 'error', text: __('Ya tenés una solicitud activa para esta mascota.'));
+            return;
+        }
+
         auth()->user()->adoptionRequests()->create([
             'pet_id' => $this->pet->id,
             'organization_id' => $this->pet->organization_id,

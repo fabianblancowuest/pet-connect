@@ -39,7 +39,7 @@
         @forelse ($this->pets as $pet)
             <div
                 class="group relative overflow-hidden rounded-xl border border-neutral-200 bg-white transition hover:shadow-lg dark:border-neutral-700 dark:bg-zinc-800 cursor-pointer"
-                wire:click="redirectToDetail({{ $pet->id }})"
+                wire:click="redirectToDetail('{{ $pet->slug }}')"
                 wire:key="pet-{{ $pet->id }}"
             >
                 <div class="aspect-[4/3] overflow-hidden bg-neutral-100 dark:bg-zinc-700">

@@ -4,22 +4,30 @@ namespace App\Livewire\Adoption;
 
 use App\Models\AdoptionRequest;
 use Flux\Flux;
-use Livewire\Attributes\Computed;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 use Livewire\Component;
+use Livewire\WithPagination;
 
 #[Title('Gestionar solicitudes de adopción')]
 #[Layout('layouts.app')]
 class ManageRequests extends Component
 {
+    use WithPagination;
+
     public ?string $statusFilter = null;
 
     public string $notes = '';
 
     public ?int $selectedRequestId = null;
 
-    #[Computed]
+    protected $queryString = ['statusFilter' => ['except' => '']];
+
+    public function updatingStatusFilter(): void
+    {
+        $this->resetPage();
+    }
+
     public function requests()
     {
         $orgIds = auth()->user()->organizations()->pluck('id');
@@ -29,7 +37,14 @@ class ManageRequests extends Component
             ->with(['pet.species', 'pet.primaryImage', 'user', 'organization'])
             ->when($this->statusFilter, fn($q) => $q->where('status', $this->statusFilter))
             ->latest()
-            ->get();
+            ->paginate(10);
+    }
+
+    public function render()
+    {
+        return view('livewire.adoption.manage-requests', [
+            'requests' => $this->requests(),
+        ]);
     }
 
     public function approve(int $id): void
@@ -69,10 +84,5 @@ class ManageRequests extends Component
     {
         $orgIds = auth()->user()->organizations()->pluck('id');
         abort_unless($orgIds->contains($request->organization_id), 403);
-    }
-
-    public function render()
-    {
-        return view('livewire.adoption.manage-requests');
     }
 }

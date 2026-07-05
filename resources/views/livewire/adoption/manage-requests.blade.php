@@ -9,7 +9,7 @@
         </flux:select>
     </div>
 
-    @if ($this->requests->isEmpty())
+    @if ($requests->isEmpty())
         <div class="flex flex-col items-center justify-center py-16 text-center">
             <flux:icon name="inbox" class="mb-4 size-12 text-neutral-300 dark:text-neutral-600" />
             <flux:heading class="mb-2 text-lg">{{ __('No hay solicitudes') }}</flux:heading>
@@ -17,7 +17,7 @@
         </div>
     @else
         <div class="space-y-4">
-            @foreach ($this->requests as $request)
+            @foreach ($requests as $request)
                 <div class="rounded-xl border border-neutral-200 bg-white p-4 dark:border-neutral-700 dark:bg-zinc-800">
                     <div class="flex items-start gap-4">
                         <div class="aspect-square size-16 shrink-0 overflow-hidden rounded-lg bg-neutral-100 dark:bg-zinc-700">
@@ -112,6 +112,10 @@
                     @endif
                 </div>
             @endforeach
+        </div>
+
+        <div class="mt-6">
+            {{ $requests->links() }}
         </div>
     @endif
 </div>

@@ -13,7 +13,7 @@
         </div>
     </div>
 
-    @if ($this->pets->isEmpty())
+    @if ($pets->isEmpty())
         <div class="flex flex-col items-center justify-center py-16 text-center">
             <flux:icon name="paw-print" class="mb-4 size-12 text-neutral-300 dark:text-neutral-600" />
             <flux:heading class="mb-2 text-lg">{{ __('No tenés mascotas registradas') }}</flux:heading>
@@ -24,7 +24,7 @@
         </div>
     @else
         <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            @foreach ($this->pets as $pet)
+            @foreach ($pets as $pet)
                 <div class="group relative overflow-hidden rounded-xl border border-neutral-200 bg-white transition hover:shadow-lg dark:border-neutral-700 dark:bg-zinc-800">
                     <div class="aspect-[4/3] overflow-hidden bg-neutral-100 dark:bg-zinc-700">
                         @if ($pet->primaryImage)
@@ -79,6 +79,10 @@
                     </div>
                 </div>
             @endforeach
+        </div>
+
+        <div class="mt-6">
+            {{ $pets->links() }}
         </div>
     @endif
 </div>
