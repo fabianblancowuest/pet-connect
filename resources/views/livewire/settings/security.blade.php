@@ -1,7 +1,7 @@
 <section class="w-full">
     @include('partials.settings-heading')
 
-    <flux:heading class="sr-only">{{ __('Security settings') }}</flux:heading>
+    <flux:heading class="sr-only">{{ __('Configuración de seguridad') }}</flux:heading>
 
     <x-settings.layout :heading="__('Actualizar contraseña')" :subheading="__('Asegurate de usar una contraseña larga y segura')">
         <form method="POST" wire:submit="updatePassword" class="mt-6 space-y-6">
@@ -122,7 +122,7 @@
                                     name="code"
                                     wire:model="code"
                                     length="6"
-                                    label="Código OTP"
+                                    :label="__('Código OTP')"
                                     label:sr-only
                                     class="mx-auto"
                                 />
