@@ -12,7 +12,7 @@
 
             <!-- Email Address -->
             <flux:input name="email" :label="__('Correo electrónico')" :value="old('email')" type="email" required
-                autofocus autocomplete="email" placeholder="email@example.com" />
+                autofocus autocomplete="email" placeholder="correo@ejemplo.com" />
 
             <!-- Password -->
             <div class="relative">

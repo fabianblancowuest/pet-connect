@@ -45,7 +45,7 @@
 
                     @auth
                         <flux:button :href="route('dashboard')" wire:navigate variant="primary">
-                            {{ __('Dashboard') }}
+                            {{ __('Ir al panel principal') }}
                         </flux:button>
                     @else
                         <flux:button :href="route('login')" wire:navigate variant="ghost">

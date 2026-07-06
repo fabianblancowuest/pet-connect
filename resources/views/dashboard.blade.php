@@ -1,4 +1,4 @@
-<x-layouts::app :title="__('Dashboard')">
+<x-layouts::app :title="__('Panel principal')">
     @php
         $user = auth()->user();
         $stats = [];

@@ -13,7 +13,7 @@
             <flux:sidebar.nav>
                 <flux:sidebar.group class="grid">
                     <flux:sidebar.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>
-                        {{ __('Dashboard') }}
+                        {{ __('Panel principal') }}
                     </flux:sidebar.item>
                     <flux:sidebar.item icon="heart" :href="route('pets.catalog')" :current="request()->routeIs('pets.catalog*')" wire:navigate>
                         {{ __('Mascotas') }}
