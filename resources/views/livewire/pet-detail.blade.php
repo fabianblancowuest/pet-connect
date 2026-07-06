@@ -9,7 +9,8 @@
         <div class="space-y-4">
             <div class="aspect-[4/3] overflow-hidden rounded-xl bg-neutral-100 dark:bg-zinc-700">
                 @if ($pet->primaryImage)
-                    <img src="{{ $pet->primaryImage->image_path }}" alt="{{ $pet->name }}" class="size-full object-cover" />
+                    <img src="{{ $pet->primaryImage->image_path }}" alt="{{ $pet->name }}"
+                        class="size-full object-cover" />
                 @else
                     <div class="flex size-full items-center justify-center text-neutral-400">
                         <flux:icon name="image" class="size-16" />
@@ -20,7 +21,8 @@
             @if ($pet->images->count() > 1)
                 <div class="flex gap-2 overflow-x-auto pb-2">
                     @foreach ($pet->images as $image)
-                        <div class="aspect-square size-20 shrink-0 overflow-hidden rounded-lg bg-neutral-100 dark:bg-zinc-700 {{ $image->is_primary ? 'ring-2 ring-blue-500' : '' }}">
+                        <div
+                            class="aspect-square size-20 shrink-0 overflow-hidden rounded-lg bg-neutral-100 dark:bg-zinc-700 {{ $image->is_primary ? 'ring-2 ring-blue-500' : '' }}">
                             <img src="{{ $image->image_path }}" alt="" class="size-full object-cover" />
                         </div>
                     @endforeach
@@ -39,17 +41,16 @@
 
                 <div class="flex gap-2">
                     @auth
-                        <flux:button
-                            wire:click="toggleFavorite"
-                            variant="ghost"
-                            class="{{ $pet->favorites->isNotEmpty() ? 'text-red-500' : '' }}"
-                        >
-                            <flux:icon name="heart" class="size-5 {{ $pet->favorites->isNotEmpty() ? 'fill-current' : '' }}" />
+                        <flux:button wire:click="toggleFavorite" variant="ghost"
+                            class="{{ $pet->favorites->isNotEmpty() ? 'text-red-500' : '' }}">
+                            <flux:icon name="heart"
+                                class="size-5 {{ $pet->favorites->isNotEmpty() ? 'fill-current' : '' }}" />
                         </flux:button>
                     @endauth
 
-                    <flux:badge size="sm" color="{{ $pet->size === 'small' ? 'emerald' : ($pet->size === 'medium' ? 'amber' : 'blue') }}">
-                        {{ __(ucfirst($pet->size)) }}
+                    <flux:badge size="sm"
+                        color="{{ $pet->size === 'small' ? 'emerald' : ($pet->size === 'medium' ? 'amber' : 'blue') }}">
+                        {{ __(ucfirst($pet->size === 'small' ? 'pequeño' : ($pet->size === 'medium' ? 'mediano' : 'grande'))) }}
                     </flux:badge>
                 </div>
             </div>
@@ -94,23 +95,30 @@
                 <flux:heading level="2" size="lg" class="mb-3">{{ __('Características') }}</flux:heading>
                 <div class="grid grid-cols-2 gap-3">
                     <div class="flex items-center gap-2 text-sm">
-                        <flux:icon name="{{ $pet->is_vaccinated ? 'circle-check' : 'circle-x' }}" class="size-5 {{ $pet->is_vaccinated ? 'text-green-500' : 'text-neutral-300 dark:text-neutral-600' }}" />
+                        <flux:icon name="{{ $pet->is_vaccinated ? 'circle-check' : 'circle-x' }}"
+                            class="size-5 {{ $pet->is_vaccinated ? 'text-green-500' : 'text-neutral-300 dark:text-neutral-600' }}" />
                         <span>{{ __('Vacunado') }}</span>
                     </div>
                     <div class="flex items-center gap-2 text-sm">
-                        <flux:icon name="{{ $pet->is_neutered ? 'circle-check' : 'circle-x' }}" class="size-5 {{ $pet->is_neutered ? 'text-green-500' : 'text-neutral-300 dark:text-neutral-600' }}" />
+                        <flux:icon name="{{ $pet->is_neutered ? 'circle-check' : 'circle-x' }}"
+                            class="size-5 {{ $pet->is_neutered ? 'text-green-500' : 'text-neutral-300 dark:text-neutral-600' }}" />
                         <span>{{ __('Esterilizado/Castrado') }}</span>
                     </div>
                     <div class="flex items-center gap-2 text-sm">
-                        <flux:icon name="{{ $pet->is_house_trained ? 'circle-check' : 'circle-x' }}" class="size-5 {{ $pet->is_house_trained ? 'text-green-500' : 'text-neutral-300 dark:text-neutral-600' }}" />
+                        <flux:icon name="{{ $pet->is_house_trained ? 'circle-check' : 'circle-x' }}"
+                            class="size-5 {{ $pet->is_house_trained ? 'text-green-500' : 'text-neutral-300 dark:text-neutral-600' }}" />
                         <span>{{ __('Educado en casa') }}</span>
                     </div>
                     <div class="flex items-center gap-2 text-sm">
-                        <flux:icon name="{{ $pet->good_with_kids ? 'circle-check' : ($pet->good_with_kids === null ? 'circle-minus' : 'circle-x') }}" class="size-5 {{ $pet->good_with_kids ? 'text-green-500' : 'text-neutral-300 dark:text-neutral-600' }}" />
+                        <flux:icon
+                            name="{{ $pet->good_with_kids ? 'circle-check' : ($pet->good_with_kids === null ? 'circle-minus' : 'circle-x') }}"
+                            class="size-5 {{ $pet->good_with_kids ? 'text-green-500' : 'text-neutral-300 dark:text-neutral-600' }}" />
                         <span>{{ __('Se lleva con niños') }}</span>
                     </div>
                     <div class="flex items-center gap-2 text-sm">
-                        <flux:icon name="{{ $pet->good_with_pets ? 'circle-check' : ($pet->good_with_pets === null ? 'circle-minus' : 'circle-x') }}" class="size-5 {{ $pet->good_with_pets ? 'text-green-500' : 'text-neutral-300 dark:text-neutral-600' }}" />
+                        <flux:icon
+                            name="{{ $pet->good_with_pets ? 'circle-check' : ($pet->good_with_pets === null ? 'circle-minus' : 'circle-x') }}"
+                            class="size-5 {{ $pet->good_with_pets ? 'text-green-500' : 'text-neutral-300 dark:text-neutral-600' }}" />
                         <span>{{ __('Se lleva con otras mascotas') }}</span>
                     </div>
                 </div>
@@ -121,7 +129,8 @@
 
                 <div class="mb-6">
                     <flux:heading level="2" size="lg" class="mb-3">{{ __('Organización') }}</flux:heading>
-                    <div class="rounded-xl border border-neutral-200 bg-neutral-50 p-4 dark:border-neutral-700 dark:bg-zinc-800/50">
+                    <div
+                        class="rounded-xl border border-neutral-200 bg-neutral-50 p-4 dark:border-neutral-700 dark:bg-zinc-800/50">
                         <flux:heading class="text-base">{{ $pet->organization->name }}</flux:heading>
                         @if ($pet->organization->city || $pet->organization->province)
                             <flux:text class="flex items-center gap-1 mt-1">
@@ -141,21 +150,12 @@
 
             @if ($pet->status === 'available')
                 @auth
-                    <flux:button
-                        variant="primary"
-                        class="w-full"
-                        x-data=""
-                        x-on:click.prevent="$dispatch('modal-show', { name: 'adoption-form' })"
-                    >
+                    <flux:button variant="primary" class="w-full" x-data=""
+                        x-on:click.prevent="$dispatch('modal-show', { name: 'adoption-form' })">
                         {{ __('Solicitar adopción') }}
                     </flux:button>
                 @else
-                    <flux:button
-                        variant="primary"
-                        class="w-full"
-                        href="{{ route('login') }}"
-                        wire:navigate
-                    >
+                    <flux:button variant="primary" class="w-full" href="{{ route('login') }}" wire:navigate>
                         {{ __('Inicia sesión para adoptar') }}
                     </flux:button>
                 @endauth

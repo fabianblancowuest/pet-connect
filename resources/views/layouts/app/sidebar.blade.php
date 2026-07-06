@@ -61,13 +61,15 @@
                         localStorage.setItem('flux.appearance', dark ? 'dark' : 'light');
                         document.documentElement.classList.toggle('dark');
                     ">
-                        <template x-if="dark">
-                            <flux:icon name="sun" class="size-5" />
-                        </template>
-                        <template x-if="!dark">
-                            <flux:icon name="moon" class="size-5" />
-                        </template>
-                        <span x-text="dark ? 'Modo claro' : 'Modo oscuro'"></span>
+                        <div class="flex items-center gap-3">
+                            <template x-if="dark">
+                                <flux:icon name="sun" class="size-5 shrink-0" />
+                            </template>
+                            <template x-if="!dark">
+                                <flux:icon name="moon" class="size-5 shrink-0" />
+                            </template>
+                            <span x-text="dark ? 'Modo claro' : 'Modo oscuro'"></span>
+                        </div>
                     </flux:sidebar.item>
                 </flux:sidebar.group>
             </flux:sidebar.nav>

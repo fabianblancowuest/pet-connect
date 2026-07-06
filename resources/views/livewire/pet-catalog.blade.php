@@ -3,24 +3,25 @@
 
     <div class="mb-6 space-y-4">
         <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-            <flux:input wire:model.live.debounce="search" placeholder="{{ __('Buscar mascotas...') }}" icon="magnifying-glass" class="max-w-sm" />
+            <flux:input wire:model.live.debounce="search" placeholder="{{ __('Buscar mascotas...') }}"
+                icon="magnifying-glass" class="max-w-sm" />
 
             <div class="flex flex-wrap gap-2">
-                <flux:select wire:model.live="species" class="w-40">
+                <flux:select wire:model.live="species" class="w-46">
                     <option value="">{{ __('Todas las especies') }}</option>
                     @foreach ($this->speciesList as $spec)
                         <option value="{{ $spec->slug }}">{{ $spec->name }} ({{ $spec->pets_count }})</option>
                     @endforeach
                 </flux:select>
 
-                <flux:select wire:model.live="size" class="w-36">
+                <flux:select wire:model.live="size" class="w-46">
                     <option value="">{{ __('Todos los tamaños') }}</option>
                     <option value="small">{{ __('Pequeño') }}</option>
                     <option value="medium">{{ __('Mediano') }}</option>
                     <option value="large">{{ __('Grande') }}</option>
                 </flux:select>
 
-                <flux:select wire:model.live="sort" class="w-36">
+                <flux:select wire:model.live="sort" class="w-46">
                     <option value="latest">{{ __('Más recientes') }}</option>
                     <option value="oldest">{{ __('Más antiguos') }}</option>
                     <option value="name">{{ __('Nombre A-Z') }}</option>
@@ -37,14 +38,12 @@
 
     <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         @forelse ($this->pets as $pet)
-            <div
-                class="group relative overflow-hidden rounded-xl border border-neutral-200 bg-white transition hover:shadow-lg dark:border-neutral-700 dark:bg-zinc-800 cursor-pointer"
-                wire:click="redirectToDetail('{{ $pet->slug }}')"
-                wire:key="pet-{{ $pet->id }}"
-            >
+            <div class="group relative overflow-hidden rounded-xl border border-neutral-200 bg-white transition hover:shadow-lg dark:border-neutral-700 dark:bg-zinc-800 cursor-pointer"
+                wire:click="redirectToDetail('{{ $pet->slug }}')" wire:key="pet-{{ $pet->id }}">
                 <div class="aspect-[4/3] overflow-hidden bg-neutral-100 dark:bg-zinc-700">
                     @if ($pet->primaryImage)
-                        <img src="{{ $pet->primaryImage->image_path }}" alt="{{ $pet->name }}" class="size-full object-cover transition group-hover:scale-105" />
+                        <img src="{{ $pet->primaryImage->image_path }}" alt="{{ $pet->name }}"
+                            class="size-full object-cover transition group-hover:scale-105" />
                     @else
                         <div class="flex size-full items-center justify-center text-neutral-400">
                             <flux:icon name="photo" class="size-12" />
@@ -60,8 +59,10 @@
                                 {{ $pet->species->name }} · {{ $pet->breed?->name ?? __('Sin raza') }}
                             </flux:text>
                         </div>
-                        <flux:badge size="sm" color="{{ $pet->size === 'small' ? 'emerald' : ($pet->size === 'medium' ? 'amber' : 'blue') }}" class="shrink-0">
-                            {{ __(ucfirst($pet->size)) }}
+                        <flux:badge size="sm"
+                            color="{{ $pet->size === 'small' ? 'emerald' : ($pet->size === 'medium' ? 'amber' : 'blue') }}"
+                            class="shrink-0">
+                            {{ __(ucfirst($pet->size === 'small' ? 'pequeño' : ($pet->size === 'medium' ? 'mediano' : 'grande'))) }}
                         </flux:badge>
                     </div>
 
@@ -95,7 +96,8 @@
             <div class="col-span-full flex flex-col items-center justify-center py-16 text-center">
                 <flux:icon name="heart" class="mb-4 size-12 text-neutral-300 dark:text-neutral-600" />
                 <flux:heading class="mb-2 text-lg">{{ __('No se encontraron mascotas') }}</flux:heading>
-                <flux:text class="mb-4">{{ __('Intentá ajustar los filtros o probá con otra búsqueda.') }}</flux:text>
+                <flux:text class="mb-4">{{ __('Intentá ajustar los filtros o probá con otra búsqueda.') }}
+                </flux:text>
                 <flux:button wire:click="clearFilters" variant="primary">{{ __('Limpiar filtros') }}</flux:button>
             </div>
         @endforelse
