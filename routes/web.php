@@ -15,6 +15,8 @@ use App\Livewire\Admin\OrganizationManager;
 use App\Livewire\Admin\OrganizationForm;
 use App\Livewire\Admin\PetManager as AdminPetManager;
 use App\Livewire\Admin\PetForm as AdminPetForm;
+use App\Livewire\Admin\UserManager;
+use App\Livewire\Admin\UserForm;
 
 Route::view('/', 'welcome')->name('home');
 Route::view('/quienes-somos', 'about')->name('about');
@@ -47,6 +49,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/mascotas', AdminPetManager::class)->name('pets.index');
         Route::get('/mascotas/crear', AdminPetForm::class)->name('pets.create');
         Route::get('/mascotas/{pet}/editar', AdminPetForm::class)->name('pets.edit');
+        Route::get('/usuarios', UserManager::class)->name('users.index');
+        Route::get('/usuarios/crear', UserForm::class)->name('users.create');
+        Route::get('/usuarios/{user}/editar', UserForm::class)->name('users.edit');
     });
 });
 
