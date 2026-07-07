@@ -11,6 +11,7 @@ use App\Livewire\Rescuer\PetForm;
 use App\Livewire\Rescuer\OrganizationSettings;
 
 Route::view('/', 'welcome')->name('home');
+Route::view('/quienes-somos', 'about')->name('about');
 
 Route::get('/mascotas', PetCatalog::class)->name('pets.catalog');
 Route::get('/mascotas/{pet:slug}', PetDetail::class)->name('pets.detail');

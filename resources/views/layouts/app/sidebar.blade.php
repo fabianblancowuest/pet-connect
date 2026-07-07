@@ -53,6 +53,9 @@
 
             <flux:sidebar.nav>
                 <flux:sidebar.group class="grid">
+                    <flux:sidebar.item icon="information-circle" :href="route('about')" :current="request()->routeIs('about')" wire:navigate>
+                        {{ __('Quiénes somos') }}
+                    </flux:sidebar.item>
                     <flux:sidebar.item icon="cog" :href="route('profile.edit')" :current="request()->routeIs('profile.edit')" wire:navigate>
                         {{ __('Configuración') }}
                     </flux:sidebar.item>

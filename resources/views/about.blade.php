@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>{{ config('app.name', 'PetConnect') }} — {{ __('Adopción y rescate de mascotas') }}</title>
+        <title>{{ config('app.name', 'PetConnect') }} — {{ __('Quiénes somos') }}</title>
         <link rel="icon" href="/favicon.ico" sizes="any">
         <link rel="icon" href="/favicon.svg" type="image/svg+xml">
         <link rel="apple-touch-icon" href="/apple-touch-icon.png">
@@ -46,6 +46,10 @@
                         </template>
                     </button>
 
+                    <flux:button :href="route('pets.catalog')" wire:navigate variant="ghost">
+                        {{ __('Mascotas') }}
+                    </flux:button>
+
                     @auth
                         <flux:button :href="route('dashboard')" wire:navigate variant="primary">
                             {{ __('Ir al panel principal') }}
@@ -74,84 +78,77 @@
                     </div>
 
                     <h1 class="mx-auto max-w-4xl text-4xl font-bold tracking-tight text-zinc-900 dark:text-white sm:text-5xl lg:text-6xl">
-                        {{ __('Dale una segunda oportunidad') }}
-                        <span class="gradient-text">{{ __('a quienes más lo necesitan') }}</span>
+                        {{ __('Quiénes somos') }}
                     </h1>
 
                     <p class="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-zinc-500 dark:text-zinc-400">
-                        {{ __('PetConnect es la plataforma que une refugios, rescatistas y adoptantes. Encontrá a tu próximo compañero y transformale la vida.') }}
+                        {{ __('Conocé la historia detrás de PetConnect y el equipo que lo hizo posible.') }}
                     </p>
-
-                    <div class="mt-10 flex items-center justify-center gap-4">
-                        <flux:button :href="route('pets.catalog')" wire:navigate variant="primary" class="px-8 h-12 text-base">
-                            {{ __('Ver mascotas disponibles') }}
-                        </flux:button>
-                        @guest
-                            <flux:button :href="route('register')" wire:navigate variant="ghost" class="h-12 text-base">
-                                {{ __('Crear cuenta') }}
-                            </flux:button>
-                        @endguest
-                    </div>
                 </div>
             </section>
 
             <section class="border-t border-zinc-100 dark:border-zinc-800">
                 <div class="mx-auto max-w-6xl px-6 py-20 lg:py-28">
-                    <div class="mx-auto mb-16 max-w-2xl text-center">
-                        <h2 class="text-3xl font-bold tracking-tight text-zinc-900 dark:text-white">
-                            {{ __('¿Cómo funciona?') }}
+                    <div class="mx-auto mb-16 max-w-3xl">
+                        <h2 class="mb-6 text-3xl font-bold tracking-tight text-zinc-900 dark:text-white">
+                            {{ __('Nuestra historia') }}
                         </h2>
-                        <p class="mt-3 text-zinc-500 dark:text-zinc-400">
-                            {{ __('Tres pasos simples para cambiar una vida.') }}
+                        <p class="mb-4 text-lg leading-relaxed text-zinc-600 dark:text-zinc-300">
+                            {{ __('PetConnect nació como un proyecto integrador de la Tecnicatura Universitaria en Programación (TUP) en la Universidad Tecnológica Nacional. Lo que comenzó como un trabajo académico se transformó en una plataforma real pensada para facilitar la conexión entre refugios, rescatistas y personas que buscan adoptar una mascota.') }}
+                        </p>
+                        <p class="text-lg leading-relaxed text-zinc-600 dark:text-zinc-300">
+                            {{ __('Nuestro objetivo es simplificar el proceso de adopción, brindar visibilidad a las organizaciones que trabajan por el bienestar animal y ayudar a que cada mascota encuentre un hogar responsable donde sea feliz.') }}
                         </p>
                     </div>
 
-                    <div class="grid gap-8 md:grid-cols-3">
-                        <div class="group relative rounded-2xl border border-zinc-200 bg-white p-8 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-emerald-500/5 dark:border-zinc-700 dark:bg-zinc-800">
-                            <div class="mb-6 flex size-12 items-center justify-center rounded-xl bg-emerald-100 text-emerald-600 dark:bg-emerald-900/30 dark:text-emerald-400">
-                                <span class="text-lg font-bold">1</span>
-                            </div>
-                            <h3 class="mb-3 text-lg font-semibold text-zinc-900 dark:text-white">{{ __('Explorá') }}</h3>
-                            <p class="text-sm leading-relaxed text-zinc-500 dark:text-zinc-400">
-                                {{ __('Navegá por nuestro catálogo de mascotas disponibles. Filtralas por especie, tamaño, edad y más para encontrar a tu compañero ideal.') }}
-                            </p>
-                        </div>
-
-                        <div class="group relative rounded-2xl border border-zinc-200 bg-white p-8 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-emerald-500/5 dark:border-zinc-700 dark:bg-zinc-800">
-                            <div class="mb-6 flex size-12 items-center justify-center rounded-xl bg-emerald-100 text-emerald-600 dark:bg-emerald-900/30 dark:text-emerald-400">
-                                <span class="text-lg font-bold">2</span>
-                            </div>
-                            <h3 class="mb-3 text-lg font-semibold text-zinc-900 dark:text-white">{{ __('Solicitá') }}</h3>
-                            <p class="text-sm leading-relaxed text-zinc-500 dark:text-zinc-400">
-                                {{ __('Envianos un mensaje contándonos sobre vos y tu hogar. El refugio se pondrá en contacto para coordinar los próximos pasos.') }}
-                            </p>
-                        </div>
-
-                        <div class="group relative rounded-2xl border border-zinc-200 bg-white p-8 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-emerald-500/5 dark:border-zinc-700 dark:bg-zinc-800">
-                            <div class="mb-6 flex size-12 items-center justify-center rounded-xl bg-emerald-100 text-emerald-600 dark:bg-emerald-900/30 dark:text-emerald-400">
-                                <span class="text-lg font-bold">3</span>
-                            </div>
-                            <h3 class="mb-3 text-lg font-semibold text-zinc-900 dark:text-white">{{ __('Adoptá') }}</h3>
-                            <p class="text-sm leading-relaxed text-zinc-500 dark:text-zinc-400">
-                                {{ __('Una vez aprobada tu solicitud, solo queda conocerse y darle la bienvenida a un nuevo miembro de la familia.') }}
-                            </p>
-                        </div>
+                    <div class="mx-auto mb-16 max-w-3xl">
+                        <h2 class="mb-6 text-3xl font-bold tracking-tight text-zinc-900 dark:text-white">
+                            {{ __('La organización') }}
+                        </h2>
+                        <p class="text-lg leading-relaxed text-zinc-600 dark:text-zinc-300">
+                            {{ __('PetConnect es una plataforma digital abierta que permite a refugios y rescatistas publicar mascotas en adopción, gestionar solicitudes y encontrar adoptantes responsables. Creemos en el poder de la tecnología para generar un impacto positivo en la sociedad y en la vida de los animales.') }}
+                        </p>
                     </div>
-                </div>
-            </section>
 
-            <section class="bg-emerald-600 dark:bg-emerald-900">
-                <div class="mx-auto max-w-6xl px-6 py-20 text-center lg:py-28">
-                    <h2 class="text-3xl font-bold tracking-tight text-white">
-                        {{ __('¿Sos un refugio o rescatista?') }}
-                    </h2>
-                    <p class="mx-auto mt-4 max-w-xl text-lg leading-relaxed text-emerald-100">
-                        {{ __('Registrá tu organización, publicá mascotas en adopción y gestioná las solicitudes de forma sencilla.') }}
-                    </p>
-                    <div class="mt-8">
-                        <flux:button :href="route('register')" wire:navigate variant="primary" class="bg-white text-emerald-700 hover:bg-emerald-50 px-8 h-12 text-base">
-                            {{ __('Sumate como rescatista') }}
-                        </flux:button>
+                    <div class="mx-auto max-w-5xl">
+                        <h2 class="mb-12 text-center text-3xl font-bold tracking-tight text-zinc-900 dark:text-white">
+                            {{ __('El equipo de desarrollo') }}
+                        </h2>
+
+                        <div class="grid gap-8 md:grid-cols-3">
+                            <div class="group rounded-2xl border border-zinc-200 bg-white p-8 text-center transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-emerald-500/5 dark:border-zinc-700 dark:bg-zinc-800">
+                                <div class="mx-auto mb-5 flex size-20 items-center justify-center rounded-full bg-emerald-100 text-emerald-600 dark:bg-emerald-900/30 dark:text-emerald-400">
+                                    <span class="text-2xl font-bold">FB</span>
+                                </div>
+                                <h3 class="mb-1 text-xl font-semibold text-zinc-900 dark:text-white">Fabián Blanco Wuest</h3>
+                                <p class="mb-3 text-sm font-medium text-emerald-600 dark:text-emerald-400">Backend Developer</p>
+                                <p class="text-sm leading-relaxed text-zinc-500 dark:text-zinc-400">
+                                    {{ __('Responsable del desarrollo del backend, la lógica de negocio, la base de datos y la integración de los servicios de la plataforma.') }}
+                                </p>
+                            </div>
+
+                            <div class="group rounded-2xl border border-zinc-200 bg-white p-8 text-center transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-emerald-500/5 dark:border-zinc-700 dark:bg-zinc-800">
+                                <div class="mx-auto mb-5 flex size-20 items-center justify-center rounded-full bg-emerald-100 text-emerald-600 dark:bg-emerald-900/30 dark:text-emerald-400">
+                                    <span class="text-2xl font-bold">SS</span>
+                                </div>
+                                <h3 class="mb-1 text-xl font-semibold text-zinc-900 dark:text-white">Sixto Servián</h3>
+                                <p class="mb-3 text-sm font-medium text-emerald-600 dark:text-emerald-400">DBA</p>
+                                <p class="text-sm leading-relaxed text-zinc-500 dark:text-zinc-400">
+                                    {{ __('Encargado del diseño, la administración y la optimización de la base de datos, garantizando la integridad y el rendimiento de los datos.') }}
+                                </p>
+                            </div>
+
+                            <div class="group rounded-2xl border border-zinc-200 bg-white p-8 text-center transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-emerald-500/5 dark:border-zinc-700 dark:bg-zinc-800">
+                                <div class="mx-auto mb-5 flex size-20 items-center justify-center rounded-full bg-emerald-100 text-emerald-600 dark:bg-emerald-900/30 dark:text-emerald-400">
+                                    <span class="text-2xl font-bold">AF</span>
+                                </div>
+                                <h3 class="mb-1 text-xl font-semibold text-zinc-900 dark:text-white">Abraham Fernandez</h3>
+                                <p class="mb-3 text-sm font-medium text-emerald-600 dark:text-emerald-400">Frontend Developer</p>
+                                <p class="text-sm leading-relaxed text-zinc-500 dark:text-zinc-400">
+                                    {{ __('Responsable de la interfaz de usuario, la experiencia de navegación y el diseño visual de la plataforma.') }}
+                                </p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </section>
