@@ -12,8 +12,6 @@ class CreateRequest extends Component
 
     public string $message = '';
 
-    public bool $showForm = false;
-
     protected function rules(): array
     {
         return [
@@ -25,7 +23,7 @@ class CreateRequest extends Component
     {
         $this->validate();
 
-        if ($this->pet->status !== 'available') {
+        if ($this->pet->status !== Pet::STATUS_AVAILABLE) {
             Flux::toast(variant: 'error', text: __('Esta mascota ya no está disponible para adopción.'));
             return;
         }
@@ -48,7 +46,7 @@ class CreateRequest extends Component
         ]);
 
         Flux::toast(variant: 'success', text: __('Solicitud enviada con éxito. El refugio se pondrá en contacto.'));
-        $this->reset('message', 'showForm');
+        $this->reset('message');
     }
 
     public function render()

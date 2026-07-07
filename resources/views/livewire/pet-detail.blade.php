@@ -42,6 +42,7 @@
                 <div class="flex gap-2">
                     @auth
                         <flux:button wire:click="toggleFavorite" variant="ghost"
+                            wire:loading.attr="disabled"
                             class="{{ $pet->favorites->isNotEmpty() ? 'text-red-500' : '' }}">
                             <flux:icon name="heart"
                                 class="size-5 {{ $pet->favorites->isNotEmpty() ? 'fill-current' : '' }}" />

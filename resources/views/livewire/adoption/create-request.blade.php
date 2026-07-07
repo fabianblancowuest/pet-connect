@@ -19,7 +19,7 @@
                     <flux:modal.close>
                         <flux:button variant="ghost">{{ __('Cancelar') }}</flux:button>
                     </flux:modal.close>
-                    <flux:button variant="primary" type="submit" wire:loading.attr="disabled">
+                    <flux:button variant="primary" type="submit" wire:loading.attr="disabled" wire:loading.class="opacity-50">
                         {{ __('Enviar solicitud') }}
                     </flux:button>
                 </div>

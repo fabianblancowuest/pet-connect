@@ -47,9 +47,23 @@
                         <p class="mt-2 line-clamp-2 text-sm text-neutral-500 dark:text-neutral-400">
                             {{ $request->message }}
                         </p>
-                        <flux:text class="mt-1 text-xs text-neutral-400">
-                            {{ $request->created_at->isoFormat('LL') }}
-                        </flux:text>
+                        <div class="mt-2 flex items-center gap-2">
+                            <flux:text class="text-xs text-neutral-400">
+                                {{ $request->created_at->isoFormat('LL') }}
+                            </flux:text>
+                            @if ($request->status === 'pending')
+                                <span class="text-neutral-300 dark:text-neutral-600">&middot;</span>
+                                <flux:button
+                                    wire:click="cancel({{ $request->id }})"
+                                    wire:confirm="{{ __('¿Cancelar esta solicitud?') }}"
+                                    variant="ghost"
+                                    size="xs"
+                                    class="text-red-500 hover:text-red-700"
+                                >
+                                    {{ __('Cancelar solicitud') }}
+                                </flux:button>
+                            @endif
+                        </div>
                     </div>
                 </div>
             @endforeach

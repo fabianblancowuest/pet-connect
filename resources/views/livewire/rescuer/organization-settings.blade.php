@@ -64,12 +64,42 @@
             </flux:field>
         </flux:fieldset>
 
+        <flux:fieldset>
+            <flux:legend>{{ __('Logo') }}</flux:legend>
+            <flux:field>
+                <flux:label>{{ __('Logo del refugio') }}</flux:label>
+                @if ($editing && $organization?->logo)
+                    <div class="mb-2">
+                        <div class="relative inline-block">
+                            <img src="{{ $organization->logo }}" alt="{{ $name }}" class="h-24 w-auto rounded-lg object-contain" />
+                            <button
+                                type="button"
+                                wire:click="removeLogo"
+                                wire:confirm="{{ __('¿Eliminar el logo?') }}"
+                                class="absolute -right-2 -top-2 flex size-5 items-center justify-center rounded-full bg-red-500 text-xs text-white hover:bg-red-600"
+                            >
+                                &times;
+                            </button>
+                        </div>
+                    </div>
+                @endif
+                <flux:input wire:model="logo" type="file" accept="image/*" />
+                <flux:error name="logo" />
+                @if ($logo && !$organization?->logo)
+                    <div class="mt-2">
+                        <img src="{{ $logo->temporaryUrl() }}" alt="" class="h-24 w-auto rounded-lg object-contain" />
+                    </div>
+                @endif
+            </flux:field>
+        </flux:fieldset>
+
         <div class="flex justify-end gap-3">
             <flux:button :href="route('dashboard')" variant="ghost" wire:navigate>
                 {{ __('Cancelar') }}
             </flux:button>
-            <flux:button variant="primary" type="submit">
+            <flux:button variant="primary" type="submit" wire:loading.attr="disabled" wire:loading.class="opacity-50">
                 {{ $editing ? __('Guardar cambios') : __('Crear refugio') }}
+                <span wire:loading wire:target="save" class="ml-2">{{ __('Guardando...') }}</span>
             </flux:button>
         </div>
     </form>

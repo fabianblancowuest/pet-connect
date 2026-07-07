@@ -11,6 +11,9 @@ use Illuminate\Support\Str;
 
 class Pet extends Model
 {
+    const STATUS_AVAILABLE = 'available';
+    const STATUS_ADOPTED = 'adopted';
+
     /** @use HasFactory<\Database\Factories\PetFactory> */
     use HasFactory, SoftDeletes;
 

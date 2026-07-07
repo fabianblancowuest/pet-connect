@@ -1,7 +1,8 @@
 <div>
-    <div class="mb-6 flex items-center justify-between">
+    <div class="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <flux:heading size="xl" level="1">{{ __('Mis mascotas') }}</flux:heading>
         <div class="flex gap-2">
+            <flux:input wire:model.live.debounce.300ms="search" :placeholder="__('Buscar...')" icon="magnifying-glass" class="w-44" />
             <flux:select wire:model.live="statusFilter" class="w-36">
                 <option value="">{{ __('Todas') }}</option>
                 <option value="available">{{ __('Disponibles') }}</option>
@@ -55,7 +56,7 @@
                                     {{ $pet->age_years }} {{ trans_choice('año|años', $pet->age_years) }}
                                 @endif
                                 @if ($pet->age_months)
-                                    {{ $pet->age_months }} {{ trans_choice('mes|meses', $pet->age_months) }}
+                                    {{ $pet->age_months }} {{ trans_choice('mes|es', $pet->age_months) }}
                                 @endif
                             </flux:text>
                             <div class="flex gap-1">

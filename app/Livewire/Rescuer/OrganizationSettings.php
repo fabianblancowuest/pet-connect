@@ -4,15 +4,19 @@ namespace App\Livewire\Rescuer;
 
 use App\Models\Organization;
 use Flux\Flux;
+use Illuminate\Support\Facades\Storage;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 use Livewire\Component;
+use Livewire\WithFileUploads;
 
 #[Title('Mi refugio')]
 #[Layout('layouts.app')]
 class OrganizationSettings extends Component
 {
+    use WithFileUploads;
+
     public ?Organization $organization = null;
 
     public string $name = '';
@@ -28,6 +32,8 @@ class OrganizationSettings extends Component
     public ?string $province = null;
 
     public ?string $website = null;
+
+    public $logo = null;
 
     public bool $editing = false;
 
@@ -57,6 +63,7 @@ class OrganizationSettings extends Component
             'city' => 'required|string|max:100',
             'province' => 'required|string|max:100',
             'website' => 'nullable|url|max:255',
+            'logo' => 'nullable|image|max:1024',
         ];
     }
 
@@ -74,6 +81,19 @@ class OrganizationSettings extends Component
             'website' => $this->website,
         ];
 
+        if ($this->logo) {
+            $path = $this->logo->store('organizations', 'public');
+            $data['logo'] = Storage::url($path);
+
+            if ($this->editing && $this->organization->logo) {
+                $oldPath = str_replace(url('/storage'), '', $this->organization->logo);
+                $oldPath = ltrim($oldPath, '/');
+                if (Storage::disk('public')->exists($oldPath)) {
+                    Storage::disk('public')->delete($oldPath);
+                }
+            }
+        }
+
         if ($this->editing) {
             $this->organization->update($data);
             Flux::toast(variant: 'success', text: __('Refugio actualizado.'));
@@ -83,6 +103,20 @@ class OrganizationSettings extends Component
             Organization::create($data);
             Flux::toast(variant: 'success', text: __('Refugio creado con éxito.'));
             $this->redirect(route('rescuer.organization'), navigate: true);
+        }
+    }
+
+    public function removeLogo(): void
+    {
+        if ($this->editing && $this->organization->logo) {
+            $oldPath = str_replace(url('/storage'), '', $this->organization->logo);
+            $oldPath = ltrim($oldPath, '/');
+            if (Storage::disk('public')->exists($oldPath)) {
+                Storage::disk('public')->delete($oldPath);
+            }
+            $this->organization->update(['logo' => null]);
+            $this->logo = null;
+            Flux::toast(text: __('Logo eliminado.'));
         }
     }
 

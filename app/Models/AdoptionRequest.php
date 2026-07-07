@@ -8,6 +8,10 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class AdoptionRequest extends Model
 {
+    const STATUS_PENDING = 'pending';
+    const STATUS_APPROVED = 'approved';
+    const STATUS_REJECTED = 'rejected';
+
     use SoftDeletes;
 
     protected $fillable = [

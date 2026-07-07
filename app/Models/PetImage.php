@@ -10,6 +10,18 @@ class PetImage extends Model
 {
     /** @use HasFactory<\Database\Factories\PetImageFactory> */
     use HasFactory;
+
+    protected static function booted(): void
+    {
+        static::deleting(function (PetImage $image) {
+            $relativePath = str_replace(url('/storage'), '', $image->image_path);
+            $relativePath = ltrim($relativePath, '/');
+            if (\Illuminate\Support\Facades\Storage::disk('public')->exists($relativePath)) {
+                \Illuminate\Support\Facades\Storage::disk('public')->delete($relativePath);
+            }
+        });
+    }
+
     protected $fillable = [
         'pet_id',
         'image_path',

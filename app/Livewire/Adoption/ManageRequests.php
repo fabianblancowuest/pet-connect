@@ -3,7 +3,9 @@
 namespace App\Livewire\Adoption;
 
 use App\Models\AdoptionRequest;
+use App\Models\Pet;
 use Flux\Flux;
+use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 use Livewire\Component;
@@ -50,23 +52,28 @@ class ManageRequests extends Component
     public function approve(int $id): void
     {
         $request = AdoptionRequest::findOrFail($id);
-        $this->authorizeOrg($request);
-        $request->update(['status' => 'approved']);
+        $this->authorize('approve', $request);
+
+        DB::transaction(function () use ($request) {
+            $request->update(['status' => AdoptionRequest::STATUS_APPROVED]);
+            $request->pet->update(['status' => Pet::STATUS_ADOPTED]);
+        });
+
         Flux::toast(variant: 'success', text: __('Solicitud aprobada.'));
     }
 
     public function reject(int $id): void
     {
         $request = AdoptionRequest::findOrFail($id);
-        $this->authorizeOrg($request);
-        $request->update(['status' => 'rejected']);
+        $this->authorize('reject', $request);
+        $request->update(['status' => AdoptionRequest::STATUS_REJECTED]);
         Flux::toast(text: __('Solicitud rechazada.'));
     }
 
     public function saveNotes(): void
     {
         $request = AdoptionRequest::findOrFail($this->selectedRequestId);
-        $this->authorizeOrg($request);
+        $this->authorize('updateNotes', $request);
         $request->update(['notes' => $this->notes]);
         $this->reset('selectedRequestId', 'notes');
         Flux::toast(variant: 'success', text: __('Notas guardadas.'));
@@ -75,14 +82,8 @@ class ManageRequests extends Component
     public function editNotes(int $id): void
     {
         $request = AdoptionRequest::findOrFail($id);
-        $this->authorizeOrg($request);
+        $this->authorize('updateNotes', $request);
         $this->selectedRequestId = $request->id;
         $this->notes = $request->notes ?? '';
-    }
-
-    protected function authorizeOrg(AdoptionRequest $request): void
-    {
-        $orgIds = auth()->user()->organizations()->pluck('id');
-        abort_unless($orgIds->contains($request->organization_id), 403);
     }
 }

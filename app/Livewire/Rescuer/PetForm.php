@@ -4,8 +4,10 @@ namespace App\Livewire\Rescuer;
 
 use App\Models\Breed;
 use App\Models\Pet;
+use App\Models\PetImage;
 use App\Models\Species;
 use Flux\Flux;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use Livewire\Attributes\Computed;
@@ -14,6 +16,8 @@ use Livewire\Attributes\Title;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 
+#[Title('Nueva mascota')]
+#[Layout('layouts.app')]
 class PetForm extends Component
 {
     use WithFileUploads;
@@ -95,6 +99,7 @@ class PetForm extends Component
             'is_house_trained' => 'boolean',
             'good_with_kids' => 'nullable|boolean',
             'good_with_pets' => 'nullable|boolean',
+            'images' => 'nullable|array|max:10',
             'images.*' => 'nullable|image|max:2048',
         ];
     }
@@ -130,47 +135,79 @@ class PetForm extends Component
             return;
         }
 
-        $data = [
-            'name' => $this->name,
-            'species_id' => $this->species_id,
-            'breed_id' => $this->breed_id,
-            'age_years' => $this->age_years,
-            'age_months' => $this->age_months,
-            'size' => $this->size,
-            'color' => $this->color,
-            'description' => $this->description,
-            'status' => $this->status,
-            'is_vaccinated' => $this->is_vaccinated,
-            'is_neutered' => $this->is_neutered,
-            'is_house_trained' => $this->is_house_trained,
-            'good_with_kids' => $this->good_with_kids,
-            'good_with_pets' => $this->good_with_pets,
-        ];
+        DB::transaction(function () use ($org) {
+            $data = [
+                'name' => $this->name,
+                'species_id' => $this->species_id,
+                'breed_id' => $this->breed_id,
+                'age_years' => $this->age_years,
+                'age_months' => $this->age_months,
+                'size' => $this->size,
+                'color' => $this->color,
+                'description' => $this->description,
+                'status' => $this->status,
+                'is_vaccinated' => $this->is_vaccinated,
+                'is_neutered' => $this->is_neutered,
+                'is_house_trained' => $this->is_house_trained,
+                'good_with_kids' => $this->good_with_kids,
+                'good_with_pets' => $this->good_with_pets,
+            ];
 
-        if ($this->editing) {
-            $orgIds = auth()->user()->organizations()->pluck('id');
-            abort_unless($orgIds->contains($this->pet->organization_id), 403);
+            if ($this->editing) {
+                $this->authorize('update', $this->pet);
 
-            $this->pet->update($data);
-            Flux::toast(variant: 'success', text: __('Mascota actualizada.'));
-        } else {
-            $data['organization_id'] = $org->id;
-            $data['user_id'] = auth()->id();
-            $this->pet = Pet::create($data);
-            Flux::toast(variant: 'success', text: __('Mascota creada con éxito.'));
-        }
+                $this->pet->update($data);
+                Flux::toast(variant: 'success', text: __('Mascota actualizada.'));
+            } else {
+                $data['organization_id'] = $org->id;
+                $data['user_id'] = auth()->id();
+                $this->pet = Pet::create($data);
+                Flux::toast(variant: 'success', text: __('Mascota creada con éxito.'));
+            }
 
-        foreach ($this->images as $image) {
-            $path = $image->store('pets', 'public');
-            $isPrimary = !$this->pet->images()->exists();
-            $this->pet->images()->create([
-                'image_path' => Storage::url($path),
-                'is_primary' => $isPrimary,
-                'sort_order' => $this->pet->images()->count(),
-            ]);
-        }
+            $nextSortOrder = $this->pet->images()->max('sort_order') + 1;
+
+            foreach ($this->images as $image) {
+                $path = $image->store('pets', 'public');
+                $this->pet->images()->create([
+                    'image_path' => Storage::url($path),
+                    'is_primary' => !$this->pet->images()->where('is_primary', true)->exists() && $nextSortOrder === 1,
+                    'sort_order' => $nextSortOrder++,
+                ]);
+            }
+        });
 
         $this->redirect(route('rescuer.pets.index'), navigate: true);
+    }
+
+    public function deleteImage(int $imageId): void
+    {
+        $image = PetImage::findOrFail($imageId);
+        $this->authorize('update', $image->pet);
+
+        $wasPrimary = $image->is_primary;
+
+        $image->delete();
+
+        if ($wasPrimary) {
+            $nextImage = $this->pet->images()->orderBy('sort_order')->first();
+            if ($nextImage) {
+                $nextImage->update(['is_primary' => true]);
+            }
+        }
+
+        Flux::toast(text: __('Imagen eliminada.'));
+    }
+
+    public function setPrimaryImage(int $imageId): void
+    {
+        $image = PetImage::findOrFail($imageId);
+        $this->authorize('update', $image->pet);
+
+        $this->pet->images()->update(['is_primary' => false]);
+        $image->update(['is_primary' => true]);
+
+        Flux::toast(variant: 'success', text: __('Imagen principal actualizada.'));
     }
 
     public function render()

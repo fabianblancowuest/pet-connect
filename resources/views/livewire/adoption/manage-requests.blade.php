@@ -67,6 +67,8 @@
                                         variant="primary"
                                         size="xs"
                                         wire:confirm="{{ __('¿Aprobar esta solicitud?') }}"
+                                        wire:loading.attr="disabled"
+                                        wire:target="approve({{ $request->id }})"
                                     >
                                         {{ __('Aprobar') }}
                                     </flux:button>
@@ -75,6 +77,8 @@
                                         variant="danger"
                                         size="xs"
                                         wire:confirm="{{ __('¿Rechazar esta solicitud?') }}"
+                                        wire:loading.attr="disabled"
+                                        wire:target="reject({{ $request->id }})"
                                     >
                                         {{ __('Rechazar') }}
                                     </flux:button>
@@ -100,7 +104,7 @@
                                     class="flex-1"
                                 />
                                 <div class="flex items-end gap-2">
-                                    <flux:button type="submit" variant="primary" size="sm">
+                                    <flux:button type="submit" variant="primary" size="sm" wire:loading.attr="disabled">
                                         {{ __('Guardar') }}
                                     </flux:button>
                                     <flux:button wire:click="$set('selectedRequestId', null)" variant="ghost" size="sm">

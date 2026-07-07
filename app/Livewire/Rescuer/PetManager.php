@@ -17,9 +17,19 @@ class PetManager extends Component
 
     public ?string $statusFilter = null;
 
-    protected $queryString = ['statusFilter' => ['except' => '']];
+    public string $search = '';
+
+    protected $queryString = [
+        'statusFilter' => ['except' => ''],
+        'search' => ['except' => ''],
+    ];
 
     public function updatingStatusFilter(): void
+    {
+        $this->resetPage();
+    }
+
+    public function updatingSearch(): void
     {
         $this->resetPage();
     }
@@ -32,15 +42,20 @@ class PetManager extends Component
             ->whereIn('organization_id', $orgIds)
             ->with(['species', 'breed', 'primaryImage'])
             ->when($this->statusFilter, fn($q) => $q->where('status', $this->statusFilter))
+            ->when($this->search, fn($q) => $q->where('name', 'like', '%' . $this->search . '%'))
             ->latest()
             ->paginate(12);
     }
 
     public function deletePet(int $id): void
     {
-        $pet = Pet::findOrFail($id);
-        $orgIds = auth()->user()->organizations()->pluck('id');
-        abort_unless($orgIds->contains($pet->organization_id), 403);
+        $pet = Pet::with('images')->findOrFail($id);
+        $this->authorize('delete', $pet);
+
+        foreach ($pet->images as $image) {
+            $image->delete();
+        }
+
         $pet->delete();
         Flux::toast(text: __('Mascota eliminada.'));
     }
