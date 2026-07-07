@@ -15,8 +15,8 @@
         <header class="sticky top-0 z-50 border-b border-zinc-200/60 bg-white/80 backdrop-blur-xl dark:border-zinc-800/60 dark:bg-zinc-900/80">
             <div class="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
                 <a href="/" class="flex items-center gap-2.5">
-                    <div class="flex size-9 items-center justify-center rounded-lg bg-emerald-600 text-white">
-                        <x-app-logo-icon class="size-5" />
+                    <div class="flex size-10 items-center justify-center rounded-lg">
+                        <x-app-logo-icon class="size-9" />
                     </div>
                     <span class="text-lg font-semibold tracking-tight text-zinc-900 dark:text-white">
                         PetConnect
@@ -157,8 +157,8 @@
         <footer class="border-t border-zinc-200 dark:border-zinc-800">
             <div class="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 px-6 py-8 sm:flex-row">
                 <div class="flex items-center gap-2 text-sm text-zinc-500 dark:text-zinc-400">
-                    <div class="flex size-6 items-center justify-center rounded-md bg-emerald-600 text-white">
-                        <x-app-logo-icon class="size-3" />
+                    <div class="flex size-8 items-center justify-center rounded-md">
+                        <x-app-logo-icon class="size-7" />
                     </div>
                     <span>&copy; {{ date('Y') }} PetConnect. {{ __('Todos los derechos reservados.') }}</span>
                 </div>
