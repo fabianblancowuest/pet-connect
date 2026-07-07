@@ -14,6 +14,13 @@ class DemoDataSeeder extends Seeder
         User::factory()->create([
             'name' => 'Test User',
             'email' => 'test@example.com',
+            'role' => 'adopter',
+        ]);
+
+        User::factory()->create([
+            'name' => 'Admin',
+            'email' => 'admin@example.com',
+            'role' => 'admin',
         ]);
 
         $rescuer = User::factory()->create([
@@ -26,8 +33,8 @@ class DemoDataSeeder extends Seeder
             'user_id' => $rescuer->id,
             'name' => 'Huellitas Refugio',
             'slug' => 'huellitas-refugio',
-            'city' => 'Buenos Aires',
-            'province' => 'CABA',
+            'city' => 'Formosa',
+            'province' => 'Formosa',
         ]);
 
         Pet::factory()->dog()->small()->withImages(3)->count(4)->create([
