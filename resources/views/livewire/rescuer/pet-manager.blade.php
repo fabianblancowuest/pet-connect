@@ -36,7 +36,7 @@
                             </div>
                         @endif
                         <div class="absolute right-2 top-2">
-                            <flux:badge size="sm" color="{{ $pet->status === 'available' ? 'emerald' : 'neutral' }}">
+                            <flux:badge size="sm" color="{{ $pet->status === 'available' ? 'emerald' : 'zinc' }}">
                                 {{ $pet->status === 'available' ? __('Disponible') : __('Adoptada') }}
                             </flux:badge>
                         </div>
