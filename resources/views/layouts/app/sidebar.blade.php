@@ -40,13 +40,15 @@
                     </flux:sidebar.nav>
                 @endif
 
-                <flux:sidebar.nav>
-                    <flux:sidebar.group class="grid">
-                        <flux:sidebar.item icon="list" :href="route('adoption.my-requests')" :current="request()->routeIs('adoption.my-requests')" wire:navigate>
-                            {{ __('Mis solicitudes') }}
-                        </flux:sidebar.item>
-                    </flux:sidebar.group>
-                </flux:sidebar.nav>
+                @if ($user->role === 'adopter')
+                    <flux:sidebar.nav>
+                        <flux:sidebar.group class="grid">
+                            <flux:sidebar.item icon="list" :href="route('adoption.my-requests')" :current="request()->routeIs('adoption.my-requests')" wire:navigate>
+                                {{ __('Mis solicitudes') }}
+                            </flux:sidebar.item>
+                        </flux:sidebar.group>
+                    </flux:sidebar.nav>
+                @endif
             @endauth
 
             <flux:spacer />
