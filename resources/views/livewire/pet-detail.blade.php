@@ -6,23 +6,23 @@
     </div>
 
     <div class="grid grid-cols-1 gap-8 lg:grid-cols-2">
-        <div class="space-y-4">
+        <div class="space-y-4"
+            x-data="{ selected: '{{ $pet->primaryImage?->image_path ?? '' }}' }">
             <div class="aspect-[4/3] overflow-hidden rounded-xl bg-neutral-100 dark:bg-zinc-700">
-                @if ($pet->primaryImage)
-                    <img src="{{ $pet->primaryImage->image_path }}" alt="{{ $pet->name }}"
-                        class="size-full object-cover" />
-                @else
-                    <div class="flex size-full items-center justify-center text-neutral-400">
-                        <flux:icon name="image" class="size-16" />
-                    </div>
-                @endif
+                <img x-show="selected" :src="selected" alt="{{ $pet->name }}"
+                    class="size-full object-cover" />
+                <div x-show="!selected"
+                    class="flex size-full items-center justify-center text-neutral-400">
+                    <flux:icon name="image" class="size-16" />
+                </div>
             </div>
 
             @if ($pet->images->count() > 1)
                 <div class="flex gap-2 overflow-x-auto pb-2">
                     @foreach ($pet->images as $image)
-                        <div
-                            class="aspect-square size-20 shrink-0 overflow-hidden rounded-lg bg-neutral-100 dark:bg-zinc-700 {{ $image->is_primary ? 'ring-2 ring-blue-500' : '' }}">
+                        <div @click="selected = '{{ $image->image_path }}'"
+                            class="aspect-square size-20 shrink-0 cursor-pointer overflow-hidden rounded-lg bg-neutral-100 transition hover:opacity-80 dark:bg-zinc-700"
+                            :class="{ 'ring-2 ring-blue-500': selected === '{{ $image->image_path }}' }">
                             <img src="{{ $image->image_path }}" alt="" class="size-full object-cover" />
                         </div>
                     @endforeach
