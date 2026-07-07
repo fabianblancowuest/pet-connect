@@ -26,7 +26,6 @@ class AdoptionRequest extends Model
         'has_outdoor_space',
         'has_other_pets',
         'other_pets_details',
-        'has_children',
         'previous_experience',
         'response',
         'notes',
@@ -37,7 +36,6 @@ class AdoptionRequest extends Model
         return [
             'has_outdoor_space' => 'boolean',
             'has_other_pets' => 'boolean',
-            'has_children' => 'boolean',
             'previous_experience' => 'boolean',
         ];
     }

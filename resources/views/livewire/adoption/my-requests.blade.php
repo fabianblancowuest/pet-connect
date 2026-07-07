@@ -67,9 +67,6 @@
                                 @endif
                             </flux:text>
                             <flux:text class="text-neutral-500 dark:text-neutral-400">
-                                <span class="font-medium">{{ __('Niños') }}:</span> {{ $request->has_children ? __('Sí') : __('No') }}
-                            </flux:text>
-                            <flux:text class="text-neutral-500 dark:text-neutral-400">
                                 <span class="font-medium">{{ __('Experiencia') }}:</span>
                                 {{ $request->previous_experience ? __('Sí') : __('No') }}
                             </flux:text>

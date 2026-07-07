@@ -44,21 +44,7 @@
                 </flux:fieldset>
 
                 <flux:fieldset>
-                    <flux:legend>{{ __('Convivientes') }}</flux:legend>
-
-                    <div class="grid grid-cols-2 gap-4">
-                        <flux:field>
-                            <flux:label>{{ __('¿Hay niños en el hogar?') }}</flux:label>
-                            <flux:select wire:model.live="has_children" required>
-                                <option value="">{{ __('Seleccionar...') }}</option>
-                                <option value="1">{{ __('Sí') }}</option>
-                                <option value="0">{{ __('No') }}</option>
-                            </flux:select>
-                            <flux:error name="has_children" />
-                        </flux:field>
-                    </div>
-
-                    <flux:separator class="my-4" />
+                    <flux:legend>{{ __('Otras mascotas') }}</flux:legend>
 
                     <flux:field>
                         <flux:label>{{ __('¿Qué otras mascotas tenés?') }}</flux:label>
