@@ -61,6 +61,15 @@
                             </flux:text>
                             <div class="flex gap-1">
                                 <flux:button
+                                    :href="route('pets.detail', $pet)"
+                                    variant="ghost"
+                                    size="xs"
+                                    icon="eye"
+                                    :title="__('Vista previa')"
+                                    target="_blank"
+                                    rel="noreferrer"
+                                />
+                                <flux:button
                                     :href="route('rescuer.pets.edit', $pet)"
                                     variant="ghost"
                                     size="xs"
