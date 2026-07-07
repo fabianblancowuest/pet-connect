@@ -23,15 +23,16 @@ class PetFactory extends Factory
             $species = (object) ['id' => fake()->randomElement([1, 2])];
         }
 
-        $breed = Breed::where('species_id', $species->id)->inRandomOrder()->first();
-
         $name = fake()->firstName();
 
         return [
             'name' => $name,
             'slug' => fn() => Str::slug($name . '-' . Str::random(6)),
             'species_id' => $species->id,
-            'breed_id' => $breed?->id,
+            'breed_id' => function (array $attrs) {
+                $speciesId = $attrs['species_id'] ?? Species::inRandomOrder()->first()?->id;
+                return Breed::where('species_id', $speciesId)->inRandomOrder()->first()?->id;
+            },
             'age_years' => fake()->optional(0.7)->numberBetween(0, 12),
             'age_months' => fake()->optional(0.5)->numberBetween(1, 11),
             'size' => fake()->randomElement(['small', 'medium', 'large']),
