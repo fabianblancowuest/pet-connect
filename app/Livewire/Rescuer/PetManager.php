@@ -19,6 +19,8 @@ class PetManager extends Component
 
     public string $search = '';
 
+    public ?Pet $previewPet = null;
+
     protected $queryString = [
         'statusFilter' => ['except' => ''],
         'search' => ['except' => ''],
@@ -45,6 +47,18 @@ class PetManager extends Component
             ->when($this->search, fn($q) => $q->where('name', 'like', '%' . $this->search . '%'))
             ->latest()
             ->paginate(12);
+    }
+
+    public function showPreview(int $id): void
+    {
+        $this->previewPet = Pet::with([
+            'species', 'breed', 'images', 'primaryImage', 'organization',
+        ])->findOrFail($id);
+    }
+
+    public function closePreview(): void
+    {
+        $this->previewPet = null;
     }
 
     public function deletePet(int $id): void

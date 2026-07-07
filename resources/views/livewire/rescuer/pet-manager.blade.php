@@ -61,13 +61,12 @@
                             </flux:text>
                             <div class="flex gap-1">
                                 <flux:button
-                                    :href="route('pets.detail', $pet)"
+                                    x-data
+                                    x-on:click="$wire.showPreview({{ $pet->id }}).then(() => $dispatch('modal-show', { name: 'pet-preview' }))"
                                     variant="ghost"
                                     size="xs"
                                     icon="eye"
                                     :title="__('Vista previa')"
-                                    target="_blank"
-                                    rel="noreferrer"
                                 />
                                 <flux:button
                                     :href="route('rescuer.pets.edit', $pet)"
@@ -95,4 +94,127 @@
             {{ $pets->links() }}
         </div>
     @endif
+
+    <flux:modal name="pet-preview" class="max-w-4xl">
+        @if ($previewPet)
+            <div class="grid grid-cols-1 gap-8 lg:grid-cols-2">
+                <div class="space-y-4">
+                    <div class="aspect-[4/3] overflow-hidden rounded-xl bg-neutral-100 dark:bg-zinc-700">
+                        @if ($previewPet->primaryImage)
+                            <img src="{{ $previewPet->primaryImage->image_path }}" alt="{{ $previewPet->name }}" class="size-full object-cover" />
+                        @else
+                            <div class="flex size-full items-center justify-center text-neutral-400">
+                                <flux:icon name="image" class="size-16" />
+                            </div>
+                        @endif
+                    </div>
+
+                    @if ($previewPet->images->count() > 1)
+                        <div class="flex gap-2 overflow-x-auto pb-2">
+                            @foreach ($previewPet->images as $image)
+                                <div class="aspect-square size-20 shrink-0 overflow-hidden rounded-lg bg-neutral-100 dark:bg-zinc-700 {{ $image->is_primary ? 'ring-2 ring-blue-500' : '' }}">
+                                    <img src="{{ $image->image_path }}" alt="" class="size-full object-cover" />
+                                </div>
+                            @endforeach
+                        </div>
+                    @endif
+                </div>
+
+                <div class="pt-6">
+                    <div class="mb-4 flex items-start justify-between">
+                        <div>
+                            <flux:heading size="xl" level="2">{{ $previewPet->name }}</flux:heading>
+                            <flux:text class="mt-1">
+                                {{ $previewPet->species->name }} &middot; {{ $previewPet->breed?->name ?? __('Sin raza') }}
+                            </flux:text>
+                        </div>
+
+                        <flux:badge size="sm"
+                            color="{{ $previewPet->size === 'small' ? 'emerald' : ($previewPet->size === 'medium' ? 'amber' : 'blue') }}">
+                            {{ __(ucfirst($previewPet->size === 'small' ? 'pequeño' : ($previewPet->size === 'medium' ? 'mediano' : 'grande'))) }}
+                        </flux:badge>
+                    </div>
+
+                    <div class="mb-6 flex flex-wrap gap-4 text-sm text-neutral-500 dark:text-neutral-400">
+                        @if ($previewPet->age_years !== null)
+                            <span class="flex items-center gap-1">
+                                <flux:icon name="calendar" class="size-4" />
+                                {{ $previewPet->age_years }} {{ trans_choice('año|años', $previewPet->age_years) }}
+                            </span>
+                        @endif
+                        @if ($previewPet->age_months !== null)
+                            <span class="flex items-center gap-1">
+                                <flux:icon name="calendar" class="size-4" />
+                                {{ $previewPet->age_months }} {{ trans_choice('mes|meses', $previewPet->age_months) }}
+                            </span>
+                        @endif
+                        @if ($previewPet->color)
+                            <span class="flex items-center gap-1">
+                                <flux:icon name="palette" class="size-4" />
+                                {{ $previewPet->color }}
+                            </span>
+                        @endif
+                        @if ($previewPet->organization)
+                            <span class="flex items-center gap-1">
+                                <flux:icon name="building" class="size-4" />
+                                {{ $previewPet->organization->name }}
+                            </span>
+                        @endif
+                    </div>
+
+                    <flux:separator class="mb-6" />
+
+                    <div class="mb-6">
+                        <flux:heading level="2" size="lg" class="mb-3">{{ __('Descripción') }}</flux:heading>
+                        <p class="text-neutral-600 dark:text-neutral-300 leading-relaxed">
+                            {{ $previewPet->description }}
+                        </p>
+                    </div>
+
+                    <div class="mb-6">
+                        <flux:heading level="2" size="lg" class="mb-3">{{ __('Características') }}</flux:heading>
+                        <div class="grid grid-cols-2 gap-3">
+                            <div class="flex items-center gap-2 text-sm">
+                                <flux:icon name="{{ $previewPet->is_vaccinated ? 'circle-check' : 'circle-x' }}"
+                                    class="size-5 {{ $previewPet->is_vaccinated ? 'text-green-500' : 'text-neutral-300 dark:text-neutral-600' }}" />
+                                <span>{{ __('Vacunado') }}</span>
+                            </div>
+                            <div class="flex items-center gap-2 text-sm">
+                                <flux:icon name="{{ $previewPet->is_neutered ? 'circle-check' : 'circle-x' }}"
+                                    class="size-5 {{ $previewPet->is_neutered ? 'text-green-500' : 'text-neutral-300 dark:text-neutral-600' }}" />
+                                <span>{{ __('Esterilizado/Castrado') }}</span>
+                            </div>
+                            <div class="flex items-center gap-2 text-sm">
+                                <flux:icon name="{{ $previewPet->is_house_trained ? 'circle-check' : 'circle-x' }}"
+                                    class="size-5 {{ $previewPet->is_house_trained ? 'text-green-500' : 'text-neutral-300 dark:text-neutral-600' }}" />
+                                <span>{{ __('Educado en casa') }}</span>
+                            </div>
+                            <div class="flex items-center gap-2 text-sm">
+                                <flux:icon
+                                    name="{{ $previewPet->good_with_kids ? 'circle-check' : ($previewPet->good_with_kids === null ? 'circle-minus' : 'circle-x') }}"
+                                    class="size-5 {{ $previewPet->good_with_kids ? 'text-green-500' : 'text-neutral-300 dark:text-neutral-600' }}" />
+                                <span>{{ __('Se lleva con niños') }}</span>
+                            </div>
+                            <div class="flex items-center gap-2 text-sm">
+                                <flux:icon
+                                    name="{{ $previewPet->good_with_pets ? 'circle-check' : ($previewPet->good_with_pets === null ? 'circle-minus' : 'circle-x') }}"
+                                    class="size-5 {{ $previewPet->good_with_pets ? 'text-green-500' : 'text-neutral-300 dark:text-neutral-600' }}" />
+                                <span>{{ __('Se lleva con otras mascotas') }}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    @if ($previewPet->status === 'available')
+                        <flux:badge color="emerald" size="lg" class="w-full justify-center py-2">
+                            {{ __('Disponible para adopción') }}
+                        </flux:badge>
+                    @else
+                        <flux:badge color="neutral" size="lg" class="w-full justify-center py-2">
+                            {{ __('Mascota adoptada') }}
+                        </flux:badge>
+                    @endif
+                </div>
+            </div>
+        @endif
+    </flux:modal>
 </div>
