@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\AdoptionRequest;
+use App\Models\Developer;
 use App\Models\Organization;
 use App\Models\Pet;
 use App\Models\User;
@@ -96,6 +97,27 @@ class DemoDataSeeder extends Seeder
         foreach ($allPets as $i => $pet) {
             $pet->update(['description' => $this->descriptions[$i % count($this->descriptions)]]);
         }
+
+        Developer::create([
+            'name' => 'Fabián Blanco Wuest',
+            'role' => 'Backend Developer',
+            'description' => 'Responsable del desarrollo del backend, la lógica de negocio, la base de datos y la integración de los servicios de la plataforma.',
+            'sort_order' => 1,
+        ]);
+
+        Developer::create([
+            'name' => 'Sixto Servián',
+            'role' => 'DBA',
+            'description' => 'Encargado del diseño, la administración y la optimización de la base de datos, garantizando la integridad y el rendimiento de los datos.',
+            'sort_order' => 2,
+        ]);
+
+        Developer::create([
+            'name' => 'Abraham Fernandez',
+            'role' => 'Frontend Developer',
+            'description' => 'Responsable de la interfaz de usuario, la experiencia de navegación y el diseño visual de la plataforma.',
+            'sort_order' => 3,
+        ]);
 
         $adopter = User::where('email', 'test@example.com')->first();
         $availablePets = Pet::where('organization_id', $org->id)->where('status', 'available')->take(2)->get();

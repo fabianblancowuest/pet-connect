@@ -109,44 +109,36 @@
                         </p>
                     </div>
 
+                    @php $developers = \App\Models\Developer::orderBy('sort_order')->get(); @endphp
+
                     <div class="mx-auto max-w-5xl">
                         <h2 class="mb-12 text-center text-3xl font-bold tracking-tight text-zinc-900 dark:text-white">
                             {{ __('El equipo de desarrollo') }}
                         </h2>
 
                         <div class="grid gap-8 md:grid-cols-3">
-                            <div class="group rounded-2xl border border-zinc-200 bg-white p-8 text-center transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-emerald-500/5 dark:border-zinc-700 dark:bg-zinc-800">
-                                <div class="mx-auto mb-5 flex size-20 items-center justify-center rounded-full bg-emerald-100 text-emerald-600 dark:bg-emerald-900/30 dark:text-emerald-400">
-                                    <span class="text-2xl font-bold">FB</span>
+                            @forelse ($developers as $dev)
+                                <div class="group rounded-2xl border border-zinc-200 bg-white p-8 text-center transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-emerald-500/5 dark:border-zinc-700 dark:bg-zinc-800">
+                                    <div class="mx-auto mb-5 flex size-20 items-center justify-center overflow-hidden rounded-full bg-emerald-100 text-emerald-600 dark:bg-emerald-900/30 dark:text-emerald-400">
+                                        @if ($dev->image)
+                                            <img src="{{ $dev->image }}" alt="{{ $dev->name }}" class="size-full object-cover" />
+                                        @else
+                                            <span class="text-2xl font-bold">{{ \Illuminate\Support\Str::initials($dev->name) }}</span>
+                                        @endif
+                                    </div>
+                                    <h3 class="mb-1 text-xl font-semibold text-zinc-900 dark:text-white">{{ $dev->name }}</h3>
+                                    @if ($dev->role)
+                                        <p class="mb-3 text-sm font-medium text-emerald-600 dark:text-emerald-400">{{ $dev->role }}</p>
+                                    @endif
+                                    @if ($dev->description)
+                                        <p class="text-sm leading-relaxed text-zinc-500 dark:text-zinc-400">{{ $dev->description }}</p>
+                                    @endif
                                 </div>
-                                <h3 class="mb-1 text-xl font-semibold text-zinc-900 dark:text-white">Fabián Blanco Wuest</h3>
-                                <p class="mb-3 text-sm font-medium text-emerald-600 dark:text-emerald-400">Backend Developer</p>
-                                <p class="text-sm leading-relaxed text-zinc-500 dark:text-zinc-400">
-                                    {{ __('Responsable del desarrollo del backend, la lógica de negocio, la base de datos y la integración de los servicios de la plataforma.') }}
-                                </p>
-                            </div>
-
-                            <div class="group rounded-2xl border border-zinc-200 bg-white p-8 text-center transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-emerald-500/5 dark:border-zinc-700 dark:bg-zinc-800">
-                                <div class="mx-auto mb-5 flex size-20 items-center justify-center rounded-full bg-emerald-100 text-emerald-600 dark:bg-emerald-900/30 dark:text-emerald-400">
-                                    <span class="text-2xl font-bold">SS</span>
+                            @empty
+                                <div class="col-span-3 text-center text-zinc-500 dark:text-zinc-400">
+                                    {{ __('Información del equipo próximamente.') }}
                                 </div>
-                                <h3 class="mb-1 text-xl font-semibold text-zinc-900 dark:text-white">Sixto Servián</h3>
-                                <p class="mb-3 text-sm font-medium text-emerald-600 dark:text-emerald-400">DBA</p>
-                                <p class="text-sm leading-relaxed text-zinc-500 dark:text-zinc-400">
-                                    {{ __('Encargado del diseño, la administración y la optimización de la base de datos, garantizando la integridad y el rendimiento de los datos.') }}
-                                </p>
-                            </div>
-
-                            <div class="group rounded-2xl border border-zinc-200 bg-white p-8 text-center transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-emerald-500/5 dark:border-zinc-700 dark:bg-zinc-800">
-                                <div class="mx-auto mb-5 flex size-20 items-center justify-center rounded-full bg-emerald-100 text-emerald-600 dark:bg-emerald-900/30 dark:text-emerald-400">
-                                    <span class="text-2xl font-bold">AF</span>
-                                </div>
-                                <h3 class="mb-1 text-xl font-semibold text-zinc-900 dark:text-white">Abraham Fernandez</h3>
-                                <p class="mb-3 text-sm font-medium text-emerald-600 dark:text-emerald-400">Frontend Developer</p>
-                                <p class="text-sm leading-relaxed text-zinc-500 dark:text-zinc-400">
-                                    {{ __('Responsable de la interfaz de usuario, la experiencia de navegación y el diseño visual de la plataforma.') }}
-                                </p>
-                            </div>
+                            @endforelse
                         </div>
                     </div>
                 </div>
