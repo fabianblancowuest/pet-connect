@@ -40,7 +40,13 @@
                                 size="sm"
                                 color="{{ $request->status === 'pending' ? 'amber' : ($request->status === 'in_progress' ? 'blue' : ($request->status === 'approved' ? 'emerald' : 'red')) }}"
                             >
-                                {{ $request->status === 'pending' ? __('Pendiente') : ($request->status === 'in_progress' ? __('En curso') : ($request->status === 'approved' ? __('Aprobada') : __('Rechazada'))) }}
+                                @switch($request->status)
+                                    @case('pending') {{ __('Pendiente') }} @break
+                                    @case('in_progress') {{ __('En curso') }} @break
+                                    @case('approved') {{ __('Aprobada') }} @break
+                                    @case('cancelled') {{ __('Cancelada') }} @break
+                                    @default {{ __('Rechazada') }}
+                                @endswitch
                             </flux:badge>
                         </div>
 

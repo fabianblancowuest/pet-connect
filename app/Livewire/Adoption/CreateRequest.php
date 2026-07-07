@@ -91,6 +91,7 @@ class CreateRequest extends Component
         Flux::toast(variant: 'success', text: __('Solicitud enviada con éxito. El refugio se pondrá en contacto.'));
         $this->reset('message', 'phone', 'housing_type', 'has_outdoor_space', 'other_pets_types', 'previous_experience');
         $this->dispatch('modal-close', name: 'adoption-form');
+        $this->dispatch('adoption-request-created');
     }
 
     public function render()

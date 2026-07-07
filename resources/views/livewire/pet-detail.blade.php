@@ -151,10 +151,16 @@
 
             @if ($pet->status === 'available')
                 @auth
-                    <flux:button variant="primary" class="w-full" x-data=""
-                        x-on:click.prevent="$dispatch('modal-show', { name: 'adoption-form' })">
-                        {{ __('Solicitar adopción') }}
-                    </flux:button>
+                    @if ($hasPendingRequest)
+                        <flux:badge color="emerald" size="lg" class="w-full justify-center py-2">
+                            {{ __('Solicitud enviada') }}
+                        </flux:badge>
+                    @else
+                        <flux:button variant="primary" class="w-full" x-data=""
+                            x-on:click.prevent="$dispatch('modal-show', { name: 'adoption-form' })">
+                            {{ __('Solicitar adopción') }}
+                        </flux:button>
+                    @endif
                 @else
                     <flux:button variant="primary" class="w-full" href="{{ route('login') }}" wire:navigate>
                         {{ __('Inicia sesión para adoptar') }}

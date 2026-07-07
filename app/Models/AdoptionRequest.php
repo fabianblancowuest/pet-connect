@@ -12,6 +12,7 @@ class AdoptionRequest extends Model
     const STATUS_IN_PROGRESS = 'in_progress';
     const STATUS_APPROVED = 'approved';
     const STATUS_REJECTED = 'rejected';
+    const STATUS_CANCELLED = 'cancelled';
 
     use SoftDeletes;
 

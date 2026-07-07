@@ -30,7 +30,7 @@ class MyRequests extends Component
             ->whereIn('status', [AdoptionRequest::STATUS_PENDING, AdoptionRequest::STATUS_IN_PROGRESS])
             ->firstOrFail();
 
-        $request->update(['status' => AdoptionRequest::STATUS_REJECTED]);
+        $request->update(['status' => AdoptionRequest::STATUS_CANCELLED]);
         Flux::toast(text: __('Solicitud cancelada.'));
     }
 

@@ -2,8 +2,10 @@
 
 namespace App\Livewire;
 
+use App\Models\AdoptionRequest;
 use App\Models\Pet;
 use Livewire\Attributes\Layout;
+use Livewire\Attributes\On;
 use Livewire\Attributes\Title;
 use Livewire\Component;
 
@@ -13,12 +15,30 @@ class PetDetail extends Component
 {
     public Pet $pet;
 
+    public bool $hasPendingRequest = false;
+
     public function mount(Pet $pet): void
     {
         $this->pet = $pet->load([
             'species', 'breed', 'organization', 'images', 'primaryImage',
             'favorites' => fn($q) => $q->where('user_id', auth()->id()),
         ]);
+
+        $this->checkPendingRequest();
+    }
+
+    #[On('adoption-request-created')]
+    public function checkPendingRequest(): void
+    {
+        if (!auth()->check()) {
+            $this->hasPendingRequest = false;
+            return;
+        }
+
+        $this->hasPendingRequest = $this->pet->adoptionRequests()
+            ->where('user_id', auth()->id())
+            ->whereIn('status', [AdoptionRequest::STATUS_PENDING, AdoptionRequest::STATUS_IN_PROGRESS, AdoptionRequest::STATUS_APPROVED])
+            ->exists();
     }
 
     public function toggleFavorite(): void
