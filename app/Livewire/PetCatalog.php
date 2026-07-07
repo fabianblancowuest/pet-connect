@@ -75,6 +75,17 @@ class PetCatalog extends Component
     }
 
     #[Computed]
+    public function recentlyAdopted()
+    {
+        return Pet::query()
+            ->with(['species', 'breed', 'primaryImage', 'organization'])
+            ->where('status', 'adopted')
+            ->latest('updated_at')
+            ->take(8)
+            ->get();
+    }
+
+    #[Computed]
     public function pets()
     {
         return Pet::query()

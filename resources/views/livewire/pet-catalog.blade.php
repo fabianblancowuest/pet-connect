@@ -1,6 +1,39 @@
 <div>
     <flux:heading size="xl" level="1" class="mb-6">{{ __('Mascotas en adopción') }}</flux:heading>
 
+    @if ($this->recentlyAdopted->isNotEmpty())
+        <div class="mb-8">
+            <flux:heading size="lg" class="mb-3">{{ __('Adoptadas recientemente') }}</flux:heading>
+            <div class="flex gap-4 overflow-x-auto pb-2">
+                @foreach ($this->recentlyAdopted as $adopted)
+                    <div class="group relative w-44 shrink-0 overflow-hidden rounded-xl border border-neutral-200 bg-white transition hover:shadow-lg dark:border-neutral-700 dark:bg-zinc-800 cursor-pointer"
+                        wire:key="adopted-{{ $adopted->id }}"
+                        wire:click="redirectToDetail('{{ $adopted->slug }}')">
+                        <div class="aspect-[4/3] overflow-hidden bg-neutral-100 dark:bg-zinc-700">
+                            @if ($adopted->primaryImage)
+                                <img src="{{ $adopted->primaryImage->image_path }}" alt="{{ $adopted->name }}"
+                                    class="size-full object-cover transition group-hover:scale-105" />
+                            @else
+                                <div class="flex size-full items-center justify-center text-neutral-400">
+                                    <flux:icon name="photo" class="size-8" />
+                                </div>
+                            @endif
+                        </div>
+                        <div class="p-3">
+                            <flux:text class="block truncate text-sm font-medium">{{ $adopted->name }}</flux:text>
+                            <flux:text class="text-xs text-neutral-400">{{ $adopted->organization->name }}</flux:text>
+                        </div>
+                        <div class="absolute right-1 top-1">
+                            <span class="inline-flex items-center rounded-full bg-emerald-600 px-2 py-0.5 text-xs font-semibold text-white">
+                                {{ __('Adoptada') }}
+                            </span>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        </div>
+    @endif
+
     <div class="mb-6 space-y-4">
         <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <flux:input wire:model.live.debounce="search" placeholder="{{ __('Buscar mascotas...') }}"
