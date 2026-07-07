@@ -5,8 +5,7 @@
     {{ filled($title ?? null) ? $title.' - '.config('app.name', 'PetConnect') : config('app.name', 'PetConnect') }}
 </title>
 
-<link rel="icon" href="/favicon.ico" sizes="any">
-<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/images/logo.png" type="image/png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 
 @fonts

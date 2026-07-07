@@ -3,9 +3,8 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>{{ config('app.name', 'PetConnect') }} — {{ __('Adopción y rescate de mascotas') }}</title>
-        <link rel="icon" href="/favicon.ico" sizes="any">
-        <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+        <title>Pet Connect - Adopción y rescate de mascotas</title>
+        <link rel="icon" href="/images/logo.png" type="image/png">
         <link rel="apple-touch-icon" href="/apple-touch-icon.png">
         @fonts
         @vite(['resources/css/app.css', 'resources/js/app.js'])
