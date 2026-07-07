@@ -46,6 +46,9 @@
                             <flux:sidebar.item icon="users" :href="route('admin.developers.index')" :current="request()->routeIs('admin.developers.*')" wire:navigate>
                                 {{ __('Desarrolladores') }}
                             </flux:sidebar.item>
+                            <flux:sidebar.item icon="paw-print" :href="route('admin.pets.index')" :current="request()->routeIs('admin.pets.*')" wire:navigate>
+                                {{ __('Mascotas') }}
+                            </flux:sidebar.item>
                             <flux:sidebar.item icon="building-office-2" :href="route('admin.organizations.index')" :current="request()->routeIs('admin.organizations.*')" wire:navigate>
                                 {{ __('Refugios') }}
                             </flux:sidebar.item>

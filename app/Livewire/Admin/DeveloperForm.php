@@ -30,7 +30,7 @@ class DeveloperForm extends Component
 
     public function mount(?Developer $developer = null): void
     {
-        if ($developer->exists) {
+        if ($developer && $developer->exists) {
             $this->developer = $developer;
             $this->editing = true;
             $this->name = $developer->name;

@@ -13,6 +13,8 @@ use App\Livewire\Admin\DeveloperManager;
 use App\Livewire\Admin\DeveloperForm;
 use App\Livewire\Admin\OrganizationManager;
 use App\Livewire\Admin\OrganizationForm;
+use App\Livewire\Admin\PetManager as AdminPetManager;
+use App\Livewire\Admin\PetForm as AdminPetForm;
 
 Route::view('/', 'welcome')->name('home');
 Route::view('/quienes-somos', 'about')->name('about');
@@ -42,6 +44,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/refugios', OrganizationManager::class)->name('organizations.index');
         Route::get('/refugios/crear', OrganizationForm::class)->name('organizations.create');
         Route::get('/refugios/{organization}/editar', OrganizationForm::class)->name('organizations.edit');
+        Route::get('/mascotas', AdminPetManager::class)->name('pets.index');
+        Route::get('/mascotas/crear', AdminPetForm::class)->name('pets.create');
+        Route::get('/mascotas/{pet}/editar', AdminPetForm::class)->name('pets.edit');
     });
 });
 

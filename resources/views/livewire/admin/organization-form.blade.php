@@ -7,14 +7,10 @@
         <flux:fieldset>
             @if (!$editing)
                 <flux:field>
-                    <flux:label>{{ __('Usuario propietario') }}</flux:label>
-                    <flux:select wire:model="user_id" required>
-                        <option value="">{{ __('Seleccionar usuario') }}</option>
-                        @foreach ($this->users as $user)
-                            <option value="{{ $user->id }}">{{ $user->name }} ({{ $user->email }})</option>
-                        @endforeach
-                    </flux:select>
-                    <flux:error name="user_id" />
+                    <flux:label>{{ __('Correo electrónico del propietario') }}</flux:label>
+                    <flux:input wire:model="email" type="email" :placeholder="__('correo@ejemplo.com')" required />
+                    <flux:text class="mt-1 text-xs text-neutral-400">{{ __('Si el correo no existe, se creará un usuario rescatista automáticamente.') }}</flux:text>
+                    <flux:error name="email" />
                 </flux:field>
             @endif
 

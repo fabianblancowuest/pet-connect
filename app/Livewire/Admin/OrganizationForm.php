@@ -5,7 +5,9 @@ namespace App\Livewire\Admin;
 use App\Models\Organization;
 use App\Models\User;
 use Flux\Flux;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
@@ -36,13 +38,13 @@ class OrganizationForm extends Component
 
     public $logo = null;
 
-    public ?int $user_id = null;
+    public string $email = '';
 
     public bool $editing = false;
 
     public function mount(?Organization $organization = null): void
     {
-        if ($organization->exists) {
+        if ($organization && $organization->exists) {
             $this->organization = $organization;
             $this->editing = true;
             $this->name = $organization->name;
@@ -52,14 +54,8 @@ class OrganizationForm extends Component
             $this->city = $organization->city;
             $this->province = $organization->province;
             $this->website = $organization->website;
-            $this->user_id = $organization->user_id;
+            $this->email = $organization->user->email;
         }
-    }
-
-    #[Computed]
-    public function users()
-    {
-        return User::whereIn('role', ['rescuer', 'admin'])->orderBy('name')->get();
     }
 
     protected function rules(): array
@@ -73,7 +69,7 @@ class OrganizationForm extends Component
             'province' => 'required|string|max:100',
             'website' => 'nullable|url|max:255',
             'logo' => 'nullable|image|max:1024',
-            'user_id' => $this->editing ? 'nullable|exists:users,id' : 'required|exists:users,id',
+            'email' => $this->editing ? 'nullable|email|max:255' : 'required|email|max:255',
         ];
     }
 
@@ -108,7 +104,16 @@ class OrganizationForm extends Component
             $this->organization->update($data);
             Flux::toast(variant: 'success', text: __('Refugio actualizado.'));
         } else {
-            $data['user_id'] = $this->user_id;
+            $user = User::firstOrCreate(
+                ['email' => $this->email],
+                [
+                    'name' => Str::before($this->email, '@'),
+                    'password' => Hash::make(Str::random(16)),
+                    'role' => 'rescuer',
+                ]
+            );
+
+            $data['user_id'] = $user->id;
             $data['status'] = 'active';
             Organization::create($data);
             Flux::toast(variant: 'success', text: __('Refugio creado con éxito.'));
