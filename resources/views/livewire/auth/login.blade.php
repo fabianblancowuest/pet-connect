@@ -40,5 +40,9 @@
             <span>{{ __('¿No tenés una cuenta?') }}</span>
             <flux:link :href="route('register')" wire:navigate>{{ __('Registrate') }}</flux:link>
         </div>
+
+        <div class="text-center text-sm">
+            <flux:link :href="route('about')" wire:navigate>{{ __('Conocé más sobre PetConnect') }}</flux:link>
+        </div>
     </div>
 </x-layouts::auth>
