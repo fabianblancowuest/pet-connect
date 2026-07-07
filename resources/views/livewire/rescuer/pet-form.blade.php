@@ -76,12 +76,25 @@
             <div class="grid grid-cols-2 gap-4">
                 <flux:field>
                     <flux:label>{{ __('Estado') }}</flux:label>
-                    <flux:select wire:model="status" required>
+                    <flux:select wire:model.live="status" required>
                         <option value="available">{{ __('Disponible') }}</option>
                         <option value="adopted">{{ __('Adoptada') }}</option>
                     </flux:select>
                     <flux:error name="status" />
                 </flux:field>
+
+                @if ($status === 'adopted')
+                    <flux:field>
+                        <flux:label>{{ __('Adoptado por') }}</flux:label>
+                        <flux:select wire:model="adopted_by_user_id" required>
+                            <option value="">{{ __('Seleccionar usuario...') }}</option>
+                            @foreach ($this->users as $u)
+                                <option value="{{ $u->id }}">{{ $u->name }} ({{ $u->email }})</option>
+                            @endforeach
+                        </flux:select>
+                        <flux:error name="adopted_by_user_id" />
+                    </flux:field>
+                @endif
             </div>
 
             <flux:field>

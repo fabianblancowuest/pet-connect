@@ -35,6 +35,7 @@ class Pet extends Model
         'is_house_trained',
         'good_with_kids',
         'good_with_pets',
+        'adopted_by_user_id',
     ];
 
     protected function casts(): array
@@ -95,5 +96,10 @@ class Pet extends Model
     public function favorites(): HasMany
     {
         return $this->hasMany(Favorite::class);
+    }
+
+    public function adoptedBy(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'adopted_by_user_id');
     }
 }

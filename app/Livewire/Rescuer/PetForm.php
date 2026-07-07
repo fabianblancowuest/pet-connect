@@ -53,6 +53,8 @@ class PetForm extends Component
 
     public $images = [];
 
+    public ?int $adopted_by_user_id = null;
+
     public bool $editing = false;
 
     public function title(): string
@@ -80,7 +82,14 @@ class PetForm extends Component
             $this->is_house_trained = $pet->is_house_trained;
             $this->good_with_kids = $pet->good_with_kids;
             $this->good_with_pets = $pet->good_with_pets;
+            $this->adopted_by_user_id = $pet->adopted_by_user_id;
         }
+    }
+
+    #[Computed]
+    public function users()
+    {
+        return \App\Models\User::orderBy('name')->get();
     }
 
     protected function rules(): array
@@ -156,6 +165,12 @@ class PetForm extends Component
                 'good_with_kids' => $this->good_with_kids,
                 'good_with_pets' => $this->good_with_pets,
             ];
+
+            if ($this->status === 'adopted') {
+                $data['adopted_by_user_id'] = $this->adopted_by_user_id;
+            } else {
+                $data['adopted_by_user_id'] = null;
+            }
 
             if ($this->editing) {
                 $this->authorize('update', $this->pet);
