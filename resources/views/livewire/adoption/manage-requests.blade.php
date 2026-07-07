@@ -59,16 +59,19 @@
                                     <span class="font-medium">{{ __('Espacio exterior') }}:</span> {{ $request->has_outdoor_space ? __('Sí') : __('No') }}
                                 </flux:text>
                                 <flux:text class="text-neutral-500 dark:text-neutral-400">
-                                    <span class="font-medium">{{ __('Otras mascotas') }}:</span> {{ $request->has_other_pets ? __('Sí') : __('No') }}
+                                    <span class="font-medium">{{ __('Otras mascotas') }}:</span>
                                     @if ($request->has_other_pets && $request->other_pets_details)
-                                        <span class="text-neutral-400">({{ $request->other_pets_details }})</span>
+                                        @php
+                                            $types = json_decode($request->other_pets_details, true) ?? [];
+                                            $labels = ['dog' => 'Perro', 'cat' => 'Gato', 'rodent' => 'Roedor', 'bird' => 'Ave', 'other' => 'Otro'];
+                                        @endphp
+                                        {{ collect($types)->map(fn($t) => $labels[$t] ?? $t)->implode(', ') }}
+                                    @else
+                                        {{ __('No') }}
                                     @endif
                                 </flux:text>
                                 <flux:text class="text-neutral-500 dark:text-neutral-400">
                                     <span class="font-medium">{{ __('Niños') }}:</span> {{ $request->has_children ? __('Sí') : __('No') }}
-                                    @if ($request->has_children && $request->children_ages)
-                                        <span class="text-neutral-400">({{ $request->children_ages }})</span>
-                                    @endif
                                 </flux:text>
                                 <flux:text class="text-neutral-500 dark:text-neutral-400">
                                     <span class="font-medium">{{ __('Experiencia previa') }}:</span>

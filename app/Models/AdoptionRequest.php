@@ -27,7 +27,6 @@ class AdoptionRequest extends Model
         'has_other_pets',
         'other_pets_details',
         'has_children',
-        'children_ages',
         'previous_experience',
         'response',
         'notes',

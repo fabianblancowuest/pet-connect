@@ -19,13 +19,9 @@ class CreateRequest extends Component
 
     public ?bool $has_outdoor_space = null;
 
-    public ?bool $has_other_pets = null;
-
-    public ?string $other_pets_details = null;
+    public array $other_pets_types = [];
 
     public ?bool $has_children = null;
-
-    public ?string $children_ages = null;
 
     public ?bool $previous_experience = null;
 
@@ -36,10 +32,9 @@ class CreateRequest extends Component
             'phone' => 'required|string|max:50',
             'housing_type' => 'required|in:house,apartment',
             'has_outdoor_space' => 'required|boolean',
-            'has_other_pets' => 'required|boolean',
-            'other_pets_details' => 'nullable|string|max:500',
+            'other_pets_types' => 'nullable|array',
+            'other_pets_types.*' => 'string|in:dog,cat,rodent,bird,other',
             'has_children' => 'required|boolean',
-            'children_ages' => 'nullable|string|max:200',
             'previous_experience' => 'required|boolean',
         ];
     }
@@ -50,7 +45,6 @@ class CreateRequest extends Component
             'phone.required' => __('El teléfono es obligatorio.'),
             'housing_type.required' => __('Decinos si vivís en casa o departamento.'),
             'has_outdoor_space.required' => __('Indicá si la mascota tendrá acceso a un espacio al aire libre.'),
-            'has_other_pets.required' => __('Indicá si tenés otras mascotas.'),
             'has_children.required' => __('Indicá si hay niños en el hogar.'),
             'previous_experience.required' => __('Indicá si tenés experiencia previa con mascotas.'),
         ];
@@ -59,11 +53,6 @@ class CreateRequest extends Component
     public function updatedHasOutdoorSpace(mixed $value): void
     {
         $this->has_outdoor_space = $value === '' || $value === null ? null : filter_var($value, FILTER_VALIDATE_BOOLEAN);
-    }
-
-    public function updatedHasOtherPets(mixed $value): void
-    {
-        $this->has_other_pets = $value === '' || $value === null ? null : filter_var($value, FILTER_VALIDATE_BOOLEAN);
     }
 
     public function updatedHasChildren(mixed $value): void
@@ -103,15 +92,14 @@ class CreateRequest extends Component
             'phone' => $this->phone,
             'housing_type' => $this->housing_type,
             'has_outdoor_space' => $this->has_outdoor_space,
-            'has_other_pets' => $this->has_other_pets,
-            'other_pets_details' => $this->has_other_pets ? $this->other_pets_details : null,
+            'has_other_pets' => !empty($this->other_pets_types),
+            'other_pets_details' => !empty($this->other_pets_types) ? json_encode($this->other_pets_types) : null,
             'has_children' => $this->has_children,
-            'children_ages' => $this->has_children ? $this->children_ages : null,
             'previous_experience' => $this->previous_experience,
         ]);
 
         Flux::toast(variant: 'success', text: __('Solicitud enviada con éxito. El refugio se pondrá en contacto.'));
-        $this->reset('message', 'phone', 'housing_type', 'has_outdoor_space', 'has_other_pets', 'other_pets_details', 'has_children', 'children_ages', 'previous_experience');
+        $this->reset('message', 'phone', 'housing_type', 'has_outdoor_space', 'other_pets_types', 'has_children', 'previous_experience');
     }
 
     public function render()

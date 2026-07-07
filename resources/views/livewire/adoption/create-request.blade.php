@@ -56,37 +56,22 @@
                             </flux:select>
                             <flux:error name="has_children" />
                         </flux:field>
-
-                        @if ($has_children)
-                            <flux:field>
-                                <flux:label>{{ __('Edades de los niños') }}</flux:label>
-                                <flux:input wire:model="children_ages" :placeholder="__('Ej: 3, 7 y 10 años')" />
-                                <flux:error name="children_ages" />
-                            </flux:field>
-                        @endif
                     </div>
 
                     <flux:separator class="my-4" />
 
-                    <div class="grid grid-cols-2 gap-4">
-                        <flux:field>
-                            <flux:label>{{ __('¿Tenés otras mascotas?') }}</flux:label>
-                            <flux:select wire:model.live="has_other_pets" required>
-                                <option value="">{{ __('Seleccionar...') }}</option>
-                                <option value="1">{{ __('Sí') }}</option>
-                                <option value="0">{{ __('No') }}</option>
-                            </flux:select>
-                            <flux:error name="has_other_pets" />
-                        </flux:field>
-
-                        @if ($has_other_pets)
-                            <flux:field>
-                                <flux:label>{{ __('Contanos sobre ellas') }}</flux:label>
-                                <flux:input wire:model="other_pets_details" :placeholder="__('Ej: 1 perro y 2 gatos')" />
-                                <flux:error name="other_pets_details" />
-                            </flux:field>
-                        @endif
-                    </div>
+                    <flux:field>
+                        <flux:label>{{ __('¿Qué otras mascotas tenés?') }}</flux:label>
+                        <flux:text class="mb-2 text-xs text-neutral-400">{{ __('Dejá vacío si no tenés otras mascotas.') }}</flux:text>
+                        <div class="flex flex-wrap gap-4">
+                            <flux:checkbox wire:model="other_pets_types" value="dog" :label="__('Perro')" />
+                            <flux:checkbox wire:model="other_pets_types" value="cat" :label="__('Gato')" />
+                            <flux:checkbox wire:model="other_pets_types" value="rodent" :label="__('Roedor')" />
+                            <flux:checkbox wire:model="other_pets_types" value="bird" :label="__('Ave')" />
+                            <flux:checkbox wire:model="other_pets_types" value="other" :label="__('Otro')" />
+                        </div>
+                        <flux:error name="other_pets_types" />
+                    </flux:field>
                 </flux:fieldset>
 
                 <flux:fieldset>
