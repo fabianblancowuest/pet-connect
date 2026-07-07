@@ -8,12 +8,25 @@
 
             <form wire:submit="submit" class="space-y-4">
                 <flux:fieldset>
-                    <flux:legend>{{ __('Contacto') }}</flux:legend>
+                    <flux:legend>{{ __('Datos personales') }}</flux:legend>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <flux:field>
+                            <flux:label>{{ __('Fecha de nacimiento') }}</flux:label>
+                            <flux:input wire:model="birth_date" type="date" required />
+                            <flux:error name="birth_date" />
+                        </flux:field>
+                        <flux:field>
+                            <flux:label>{{ __('Teléfono de contacto') }}</flux:label>
+                            <flux:input wire:model="phone" :placeholder="__('+54 11 1234-5678')" required />
+                            <flux:error name="phone" />
+                        </flux:field>
+                    </div>
 
                     <flux:field>
-                        <flux:label>{{ __('Teléfono de contacto') }}</flux:label>
-                        <flux:input wire:model="phone" :placeholder="__('+54 11 1234-5678')" required />
-                        <flux:error name="phone" />
+                        <flux:label>{{ __('Dirección') }}</flux:label>
+                        <flux:input wire:model="address" :placeholder="__('Calle, número, ciudad, provincia')" required />
+                        <flux:error name="address" />
                     </flux:field>
                 </flux:fieldset>
 

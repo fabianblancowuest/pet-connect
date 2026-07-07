@@ -23,6 +23,8 @@ class AdoptionRequest extends Model
         'status',
         'message',
         'phone',
+        'birth_date',
+        'address',
         'housing_type',
         'has_outdoor_space',
         'has_other_pets',

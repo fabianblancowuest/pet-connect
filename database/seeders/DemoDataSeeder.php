@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\AdoptionRequest;
 use App\Models\Organization;
 use App\Models\Pet;
 use App\Models\User;
@@ -66,5 +67,21 @@ class DemoDataSeeder extends Seeder
             'organization_id' => $org->id,
             'user_id' => $rescuer->id,
         ]);
+
+        $adopter = User::where('email', 'test@example.com')->first();
+        $availablePets = Pet::where('organization_id', $org->id)->where('status', 'available')->take(2)->get();
+
+        foreach ($availablePets as $pet) {
+            AdoptionRequest::create([
+                'pet_id' => $pet->id,
+                'user_id' => $adopter->id,
+                'organization_id' => $org->id,
+                'status' => AdoptionRequest::STATUS_PENDING,
+                'phone' => '+54 370 123-4567',
+                'birth_date' => '1995-03-15',
+                'address' => 'Av. Principal 123, Formosa',
+                'housing_type' => 'house',
+            ]);
+        }
     }
 }

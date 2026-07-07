@@ -15,6 +15,10 @@ class CreateRequest extends Component
 
     public string $phone = '';
 
+    public string $birth_date = '';
+
+    public string $address = '';
+
     public string $housing_type = '';
 
     public ?bool $has_outdoor_space = null;
@@ -28,6 +32,8 @@ class CreateRequest extends Component
         return [
             'message' => 'required|string|min:20|max:1000',
             'phone' => 'required|string|max:50',
+            'birth_date' => 'required|date|before:today',
+            'address' => 'required|string|max:255',
             'housing_type' => 'required|in:house,apartment',
             'has_outdoor_space' => 'required|boolean',
             'other_pets_types' => 'nullable|array',
@@ -40,6 +46,9 @@ class CreateRequest extends Component
     {
         return [
             'phone.required' => __('El teléfono es obligatorio.'),
+            'birth_date.required' => __('La fecha de nacimiento es obligatoria.'),
+            'birth_date.before' => __('La fecha de nacimiento debe ser anterior a hoy.'),
+            'address.required' => __('La dirección es obligatoria.'),
             'housing_type.required' => __('Decinos si vivís en casa o departamento.'),
             'has_outdoor_space.required' => __('Indicá si la mascota tendrá acceso a un espacio al aire libre.'),
             'previous_experience.required' => __('Indicá si tenés experiencia previa con mascotas.'),
@@ -81,6 +90,8 @@ class CreateRequest extends Component
             'status' => 'pending',
             'message' => $this->message,
             'phone' => $this->phone,
+            'birth_date' => $this->birth_date,
+            'address' => $this->address,
             'housing_type' => $this->housing_type,
             'has_outdoor_space' => $this->has_outdoor_space,
             'has_other_pets' => !empty($this->other_pets_types),
@@ -89,7 +100,7 @@ class CreateRequest extends Component
         ]);
 
         Flux::toast(variant: 'success', text: __('Solicitud enviada con éxito. El refugio se pondrá en contacto.'));
-        $this->reset('message', 'phone', 'housing_type', 'has_outdoor_space', 'other_pets_types', 'previous_experience');
+        $this->reset('message', 'phone', 'birth_date', 'address', 'housing_type', 'has_outdoor_space', 'other_pets_types', 'previous_experience');
         $this->dispatch('modal-close', name: 'adoption-form');
         $this->dispatch('adoption-request-created');
     }
