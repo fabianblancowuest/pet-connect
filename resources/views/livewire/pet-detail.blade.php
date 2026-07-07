@@ -151,16 +151,18 @@
 
             @if ($pet->status === 'available')
                 @auth
-                    <flux:button variant="primary" class="w-full" x-data=""
-                        x-on:click.prevent="
-                            if ({{ $userRequestCount }} > 0) {
-                                $dispatch('modal-show', { name: 'confirm-requests' });
-                            } else {
-                                $dispatch('modal-show', { name: 'adoption-form' });
-                            }
-                        ">
-                        {{ __('Solicitar adopción') }}
-                    </flux:button>
+                    @if (auth()->user()->role !== 'admin')
+                        <flux:button variant="primary" class="w-full" x-data=""
+                            x-on:click.prevent="
+                                if ({{ $userRequestCount }} > 0) {
+                                    $dispatch('modal-show', { name: 'confirm-requests' });
+                                } else {
+                                    $dispatch('modal-show', { name: 'adoption-form' });
+                                }
+                            ">
+                            {{ __('Solicitar adopción') }}
+                        </flux:button>
+                    @endif
                 @else
                     <flux:button variant="primary" class="w-full" href="{{ route('login') }}" wire:navigate>
                         {{ __('Inicia sesión para adoptar') }}

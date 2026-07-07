@@ -24,7 +24,7 @@
             @auth
                 @php $user = auth()->user(); @endphp
 
-                @if (in_array($user->role, ['rescuer', 'admin']))
+                @if ($user->role === 'rescuer')
                     <flux:sidebar.nav>
                         <flux:sidebar.group class="grid">
                             <flux:sidebar.item icon="building" :href="route('rescuer.organization')" :current="request()->routeIs('rescuer.organization')" wire:navigate>

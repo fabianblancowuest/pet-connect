@@ -89,6 +89,11 @@ class CreateRequest extends Component
 
     public function submit(): void
     {
+        if (auth()->user()->role === 'admin') {
+            Flux::toast(variant: 'error', text: __('Los administradores no pueden solicitar adopciones.'));
+            return;
+        }
+
         $this->validate();
 
         if ($this->pet->status !== Pet::STATUS_AVAILABLE) {
