@@ -71,6 +71,16 @@
                     <flux:input wire:model="color" :placeholder="__('Ej: Marrón, Negro...')" />
                     <flux:error name="color" />
                 </flux:field>
+
+                <flux:field>
+                    <flux:label>{{ __('Sexo') }}</flux:label>
+                    <flux:select wire:model="sex">
+                        <option value="">{{ __('No especificado') }}</option>
+                        <option value="male">{{ __('Macho') }}</option>
+                        <option value="female">{{ __('Hembra') }}</option>
+                    </flux:select>
+                    <flux:error name="sex" />
+                </flux:field>
             </div>
 
             <div class="grid grid-cols-2 gap-4">

@@ -38,6 +38,8 @@ class PetForm extends Component
 
     public ?string $color = null;
 
+    public ?string $sex = null;
+
     public string $description = '';
 
     public string $status = 'available';
@@ -78,6 +80,7 @@ class PetForm extends Component
             $this->age_months = $pet->age_months;
             $this->size = $pet->size;
             $this->color = $pet->color;
+            $this->sex = $pet->sex;
             $this->description = $pet->description;
             $this->status = $pet->status;
             $this->is_vaccinated = $pet->is_vaccinated;
@@ -109,6 +112,7 @@ class PetForm extends Component
             'age_months' => 'nullable|integer|min:0|max:11',
             'size' => 'required|in:small,medium,large',
             'color' => 'nullable|string|max:100',
+            'sex' => 'nullable|in:male,female',
             'description' => 'required|string|max:5000',
             'status' => 'required|in:available,adopted',
             'is_vaccinated' => 'boolean',

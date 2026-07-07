@@ -35,6 +35,7 @@ class Pet extends Model
         'is_house_trained',
         'good_with_kids',
         'good_with_pets',
+        'sex',
         'adopted_by_user_id',
     ];
 
