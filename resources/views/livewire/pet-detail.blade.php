@@ -57,16 +57,16 @@
             </div>
 
             <div class="mb-6 flex flex-wrap gap-4 text-sm text-neutral-500 dark:text-neutral-400">
+                @if ($pet->sex)
+                    <span class="flex items-center gap-1">
+                        <flux:icon name="{{ $pet->sex === 'male' ? 'mars' : 'venus' }}" class="size-4" />
+                        {{ $pet->sex === 'male' ? __('Macho') : __('Hembra') }}
+                    </span>
+                @endif
                 @if ($pet->age_years !== null)
                     <span class="flex items-center gap-1">
                         <flux:icon name="calendar" class="size-4" />
                         {{ $pet->age_years }} {{ trans_choice('año|años', $pet->age_years) }}
-                    </span>
-                @endif
-                @if ($pet->age_months !== null)
-                    <span class="flex items-center gap-1">
-                        <flux:icon name="calendar" class="size-4" />
-                        {{ $pet->age_months }} {{ trans_choice('mes|meses', $pet->age_months) }}
                     </span>
                 @endif
                 @if ($pet->color)
