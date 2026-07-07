@@ -19,11 +19,11 @@ class CreateRequest extends Component
 
     public ?bool $has_outdoor_space = null;
 
-    public bool $has_other_pets = false;
+    public ?bool $has_other_pets = null;
 
     public ?string $other_pets_details = null;
 
-    public bool $has_children = false;
+    public ?bool $has_children = null;
 
     public ?string $children_ages = null;
 
@@ -91,7 +91,7 @@ class CreateRequest extends Component
         ]);
 
         Flux::toast(variant: 'success', text: __('Solicitud enviada con éxito. El refugio se pondrá en contacto.'));
-        $this->reset();
+        $this->reset('message', 'phone', 'housing_type', 'has_outdoor_space', 'has_other_pets', 'other_pets_details', 'has_children', 'children_ages', 'previous_experience');
     }
 
     public function render()
