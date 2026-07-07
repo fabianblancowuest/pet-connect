@@ -151,16 +151,16 @@
 
             @if ($pet->status === 'available')
                 @auth
-                    @if ($hasPendingRequest)
-                        <flux:badge color="blue" size="lg" class="w-full justify-center py-2">
-                            {{ trans_choice('Ya solicitaste la adopción de :count mascota|Ya solicitaste la adopción de :count mascotas', $userRequestCount, ['count' => $userRequestCount]) }}
-                        </flux:badge>
-                    @else
-                        <flux:button variant="primary" class="w-full" x-data=""
-                            x-on:click.prevent="$dispatch('modal-show', { name: 'adoption-form' })">
-                            {{ __('Solicitar adopción') }}
-                        </flux:button>
-                    @endif
+                    <flux:button variant="primary" class="w-full" x-data=""
+                        x-on:click.prevent="
+                            if ({{ $userRequestCount }} > 0) {
+                                $dispatch('modal-show', { name: 'confirm-requests' });
+                            } else {
+                                $dispatch('modal-show', { name: 'adoption-form' });
+                            }
+                        ">
+                        {{ __('Solicitar adopción') }}
+                    </flux:button>
                 @else
                     <flux:button variant="primary" class="w-full" href="{{ route('login') }}" wire:navigate>
                         {{ __('Inicia sesión para adoptar') }}
@@ -171,6 +171,26 @@
                     {{ __('Mascota adoptada') }}
                 </flux:badge>
             @endif
+
+            <flux:modal name="confirm-requests" class="max-w-md">
+                <div class="space-y-4">
+                    <flux:heading size="lg">{{ __('Solicitudes activas') }}</flux:heading>
+                    <flux:text>
+                        {{ trans_choice('Ya solicitaste la adopción de :count mascota. ¿Deseas continuar?|Ya solicitaste la adopción de :count mascotas. ¿Deseas continuar?', $userRequestCount, ['count' => $userRequestCount]) }}
+                    </flux:text>
+                    <div class="flex justify-end gap-3">
+                        <flux:modal.close>
+                            <flux:button variant="ghost">{{ __('Cancelar') }}</flux:button>
+                        </flux:modal.close>
+                        <flux:modal.close>
+                            <flux:button variant="primary" x-data=""
+                                x-on:click="setTimeout(() => $dispatch('modal-show', { name: 'adoption-form' }), 150)">
+                                {{ __('Continuar') }}
+                            </flux:button>
+                        </flux:modal.close>
+                    </div>
+                </div>
+            </flux:modal>
         </div>
     </div>
 
