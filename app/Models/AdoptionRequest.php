@@ -21,9 +21,27 @@ class AdoptionRequest extends Model
         'organization_id',
         'status',
         'message',
+        'phone',
+        'housing_type',
+        'has_outdoor_space',
+        'has_other_pets',
+        'other_pets_details',
+        'has_children',
+        'children_ages',
+        'previous_experience',
         'response',
         'notes',
     ];
+
+    protected function casts(): array
+    {
+        return [
+            'has_outdoor_space' => 'boolean',
+            'has_other_pets' => 'boolean',
+            'has_children' => 'boolean',
+            'previous_experience' => 'boolean',
+        ];
+    }
 
     public function pet(): BelongsTo
     {

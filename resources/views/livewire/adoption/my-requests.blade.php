@@ -44,6 +44,28 @@
                             </flux:badge>
                         </div>
 
+                        <div class="mt-3 grid grid-cols-2 gap-x-6 gap-y-1 text-sm">
+                            <flux:text class="text-neutral-500 dark:text-neutral-400">
+                                <span class="font-medium">{{ __('Teléfono') }}:</span> {{ $request->phone }}
+                            </flux:text>
+                            <flux:text class="text-neutral-500 dark:text-neutral-400">
+                                <span class="font-medium">{{ __('Vivienda') }}:</span> {{ $request->housing_type === 'house' ? __('Casa') : __('Departamento') }}
+                            </flux:text>
+                            <flux:text class="text-neutral-500 dark:text-neutral-400">
+                                <span class="font-medium">{{ __('Espacio exterior') }}:</span> {{ $request->has_outdoor_space ? __('Sí') : __('No') }}
+                            </flux:text>
+                            <flux:text class="text-neutral-500 dark:text-neutral-400">
+                                <span class="font-medium">{{ __('Otras mascotas') }}:</span> {{ $request->has_other_pets ? __('Sí') : __('No') }}
+                            </flux:text>
+                            <flux:text class="text-neutral-500 dark:text-neutral-400">
+                                <span class="font-medium">{{ __('Niños') }}:</span> {{ $request->has_children ? __('Sí') : __('No') }}
+                            </flux:text>
+                            <flux:text class="text-neutral-500 dark:text-neutral-400">
+                                <span class="font-medium">{{ __('Experiencia') }}:</span>
+                                {{ $request->previous_experience ? __('Sí') : __('No') }}
+                            </flux:text>
+                        </div>
+
                         <div class="mt-2 rounded-lg bg-neutral-50 p-3 dark:bg-zinc-700/50">
                             <flux:text class="text-xs font-medium text-neutral-500 dark:text-neutral-400">{{ __('Tu mensaje') }}</flux:text>
                             <p class="mt-1 text-sm text-neutral-600 dark:text-neutral-300">
