@@ -24,8 +24,8 @@
                             <flux:text class="text-xs text-neutral-400">{{ $adopted->organization->name }}</flux:text>
                         </div>
                         <div class="absolute right-1 top-1">
-                            <span class="inline-flex items-center rounded-full bg-neutral-600 px-2 py-0.5 text-xs font-semibold text-white">
-                                {{ $adopted->adoptedBy?->name ?? __('Adoptada') }}
+                            <span class="inline-flex items-center rounded-full bg-emerald-600 px-2 py-0.5 text-xs font-semibold text-white">
+                                {{ __('Adoptada') }}
                             </span>
                         </div>
                     </div>

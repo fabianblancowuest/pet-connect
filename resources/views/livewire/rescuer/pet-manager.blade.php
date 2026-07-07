@@ -37,7 +37,7 @@
                         @endif
                         <div class="absolute right-2 top-2">
                             <span class="inline-flex items-center rounded-full px-2 py-0.5 text-xs font-semibold {{ $pet->status === 'available' ? 'bg-emerald-600 text-white' : 'bg-zinc-700 text-white dark:bg-zinc-600' }}">
-                                {{ $pet->status === 'available' ? __('Disponible') : __('Adoptada por :name', ['name' => $pet->adoptedBy?->name ?? '-']) }}
+                                {{ $pet->status === 'available' ? __('Disponible') : __('Adoptada') }}
                             </span>
                         </div>
                     </div>
@@ -212,7 +212,7 @@
                         </flux:badge>
                     @else
                         <flux:badge color="neutral" size="lg" class="w-full justify-center py-2">
-                                {{ __('Adoptada por :name', ['name' => $previewPet->adoptedBy?->name ?? __('usuario desconocido')]) }}
+                                {{ __('Mascota adoptada') }}
                             </flux:badge>
                     @endif
                 </div>

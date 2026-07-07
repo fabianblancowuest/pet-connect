@@ -170,7 +170,15 @@
                 @endauth
             @else
                 <flux:badge color="neutral" size="lg" class="w-full justify-center py-2">
-                    {{ __('Adoptada por :name', ['name' => $pet->adoptedBy?->name ?? __('usuario desconocido')]) }}
+                    @auth('web')
+                        @if (in_array(auth()->user()->role, ['rescuer', 'admin']) && $pet->adoptedBy)
+                            {{ __('Adoptada por :name', ['name' => $pet->adoptedBy->name]) }}
+                        @else
+                            {{ __('Mascota adoptada') }}
+                        @endif
+                    @else
+                        {{ __('Mascota adoptada') }}
+                    @endauth
                 </flux:badge>
             @endif
 
