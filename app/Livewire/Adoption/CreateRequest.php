@@ -27,14 +27,36 @@ class CreateRequest extends Component
 
     public ?bool $previous_experience = null;
 
+    public bool $hasPreviousRequests = false;
+
+    public function mount(): void
+    {
+        $lastRequest = auth()->user()->adoptionRequests()
+            ->whereNotNull('phone')
+            ->latest()
+            ->first();
+
+        if ($lastRequest) {
+            $this->hasPreviousRequests = true;
+            $this->phone = $lastRequest->phone;
+            $this->birth_date = $lastRequest->birth_date ?? '';
+            $this->address = $lastRequest->address ?? '';
+            $this->housing_type = $lastRequest->housing_type;
+        }
+    }
+
     protected function rules(): array
     {
+        $personal = $this->hasPreviousRequests
+            ? 'nullable'
+            : 'required';
+
         return [
             'message' => 'required|string|min:20|max:1000',
-            'phone' => 'required|string|max:50',
-            'birth_date' => 'required|date|before:today',
-            'address' => 'required|string|max:255',
-            'housing_type' => 'required|in:house,apartment',
+            'phone' => $personal . '|string|max:50',
+            'birth_date' => $personal . '|date|before:today',
+            'address' => $personal . '|string|max:255',
+            'housing_type' => $personal . '|in:house,apartment',
             'has_outdoor_space' => 'required|boolean',
             'other_pets_types' => 'nullable|array',
             'other_pets_types.*' => 'string|in:dog,cat,rodent,bird,other',
@@ -84,15 +106,19 @@ class CreateRequest extends Component
             return;
         }
 
+        $lastRequest = $this->hasPreviousRequests
+            ? auth()->user()->adoptionRequests()->whereNotNull('phone')->latest()->first()
+            : null;
+
         auth()->user()->adoptionRequests()->create([
             'pet_id' => $this->pet->id,
             'organization_id' => $this->pet->organization_id,
             'status' => 'pending',
             'message' => $this->message,
-            'phone' => $this->phone,
-            'birth_date' => $this->birth_date,
-            'address' => $this->address,
-            'housing_type' => $this->housing_type,
+            'phone' => $lastRequest?->phone ?? $this->phone,
+            'birth_date' => $lastRequest?->birth_date ?? $this->birth_date,
+            'address' => $lastRequest?->address ?? $this->address,
+            'housing_type' => $lastRequest?->housing_type ?? $this->housing_type,
             'has_outdoor_space' => $this->has_outdoor_space,
             'has_other_pets' => !empty($this->other_pets_types),
             'other_pets_details' => !empty($this->other_pets_types) ? json_encode($this->other_pets_types) : null,

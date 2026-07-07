@@ -7,54 +7,77 @@
             </div>
 
             <form wire:submit="submit" class="space-y-4">
-                <flux:fieldset>
-                    <flux:legend>{{ __('Datos personales') }}</flux:legend>
+                @if ($hasPreviousRequests)
+                    <flux:badge color="blue" size="lg" class="w-full justify-center py-2">
+                        {{ __('Tus datos personales ya están cargados de solicitudes anteriores.') }}
+                    </flux:badge>
+                @endif
 
-                    <div class="grid grid-cols-2 gap-4">
-                        <flux:field>
-                            <flux:label>{{ __('Fecha de nacimiento') }}</flux:label>
-                            <flux:input wire:model="birth_date" type="date" required />
-                            <flux:error name="birth_date" />
-                        </flux:field>
-                        <flux:field>
-                            <flux:label>{{ __('Teléfono de contacto') }}</flux:label>
-                            <flux:input wire:model="phone" :placeholder="__('+54 11 1234-5678')" required />
-                            <flux:error name="phone" />
-                        </flux:field>
-                    </div>
+                @if (!$hasPreviousRequests)
+                    <flux:fieldset>
+                        <flux:legend>{{ __('Datos personales') }}</flux:legend>
 
-                    <flux:field>
-                        <flux:label>{{ __('Dirección') }}</flux:label>
-                        <flux:input wire:model="address" :placeholder="__('Calle, número, ciudad, provincia')" required />
-                        <flux:error name="address" />
-                    </flux:field>
-                </flux:fieldset>
-
-                <flux:fieldset>
-                    <flux:legend>{{ __('Tu hogar') }}</flux:legend>
-
-                    <div class="grid grid-cols-2 gap-4">
-                        <flux:field>
-                            <flux:label>{{ __('Tipo de vivienda') }}</flux:label>
-                            <flux:select wire:model="housing_type" required>
-                                <option value="">{{ __('Seleccionar...') }}</option>
-                                <option value="house">{{ __('Casa') }}</option>
-                                <option value="apartment">{{ __('Departamento') }}</option>
-                            </flux:select>
-                            <flux:error name="housing_type" />
-                        </flux:field>
+                        <div class="grid grid-cols-2 gap-4">
+                            <flux:field>
+                                <flux:label>{{ __('Fecha de nacimiento') }}</flux:label>
+                                <flux:input wire:model="birth_date" type="date" required />
+                                <flux:error name="birth_date" />
+                            </flux:field>
+                            <flux:field>
+                                <flux:label>{{ __('Teléfono de contacto') }}</flux:label>
+                                <flux:input wire:model="phone" :placeholder="__('+54 11 1234-5678')" required />
+                                <flux:error name="phone" />
+                            </flux:field>
+                        </div>
 
                         <flux:field>
-                            <flux:label>{{ __('¿Tiene espacio al aire libre?') }}</flux:label>
-                            <flux:select wire:model="has_outdoor_space" required>
-                                <option value="">{{ __('Seleccionar...') }}</option>
-                                <option value="1">{{ __('Sí') }}</option>
-                                <option value="0">{{ __('No') }}</option>
-                            </flux:select>
-                            <flux:error name="has_outdoor_space" />
+                            <flux:label>{{ __('Dirección') }}</flux:label>
+                            <flux:input wire:model="address" :placeholder="__('Calle, número, ciudad, provincia')" required />
+                            <flux:error name="address" />
                         </flux:field>
-                    </div>
-                </flux:fieldset>
+                    </flux:fieldset>
+
+                    <flux:fieldset>
+                        <flux:legend>{{ __('Tu hogar') }}</flux:legend>
+
+                        <div class="grid grid-cols-2 gap-4">
+                            <flux:field>
+                                <flux:label>{{ __('Tipo de vivienda') }}</flux:label>
+                                <flux:select wire:model="housing_type" required>
+                                    <option value="">{{ __('Seleccionar...') }}</option>
+                                    <option value="house">{{ __('Casa') }}</option>
+                                    <option value="apartment">{{ __('Departamento') }}</option>
+                                </flux:select>
+                                <flux:error name="housing_type" />
+                            </flux:field>
+                            <flux:field>
+                                <flux:label>{{ __('¿Tiene espacio al aire libre?') }}</flux:label>
+                                <flux:select wire:model="has_outdoor_space" required>
+                                    <option value="">{{ __('Seleccionar...') }}</option>
+                                    <option value="1">{{ __('Sí') }}</option>
+                                    <option value="0">{{ __('No') }}</option>
+                                </flux:select>
+                                <flux:error name="has_outdoor_space" />
+                            </flux:field>
+                        </div>
+                    </flux:fieldset>
+                @else
+                    <flux:fieldset>
+                        <flux:legend>{{ __('Tu hogar') }}</flux:legend>
+
+                        <div class="grid grid-cols-2 gap-4">
+                            <flux:field>
+                                <flux:label>{{ __('¿Tiene espacio al aire libre?') }}</flux:label>
+                                <flux:select wire:model="has_outdoor_space" required>
+                                    <option value="">{{ __('Seleccionar...') }}</option>
+                                    <option value="1">{{ __('Sí') }}</option>
+                                    <option value="0">{{ __('No') }}</option>
+                                </flux:select>
+                                <flux:error name="has_outdoor_space" />
+                            </flux:field>
+                        </div>
+                    </flux:fieldset>
+                @endif
 
                 <flux:fieldset>
                     <flux:legend>{{ __('Otras mascotas') }}</flux:legend>

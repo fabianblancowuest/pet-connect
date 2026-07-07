@@ -152,8 +152,8 @@
             @if ($pet->status === 'available')
                 @auth
                     @if ($hasPendingRequest)
-                        <flux:badge color="emerald" size="lg" class="w-full justify-center py-2">
-                            {{ __('Solicitud enviada') }}
+                        <flux:badge color="blue" size="lg" class="w-full justify-center py-2">
+                            {{ trans_choice('Ya solicitaste la adopción de :count mascota|Ya solicitaste la adopción de :count mascotas', $userRequestCount, ['count' => $userRequestCount]) }}
                         </flux:badge>
                     @else
                         <flux:button variant="primary" class="w-full" x-data=""

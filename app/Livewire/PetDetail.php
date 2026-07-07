@@ -17,6 +17,8 @@ class PetDetail extends Component
 
     public bool $hasPendingRequest = false;
 
+    public int $userRequestCount = 0;
+
     public function mount(Pet $pet): void
     {
         $this->pet = $pet->load([
@@ -32,6 +34,7 @@ class PetDetail extends Component
     {
         if (!auth()->check()) {
             $this->hasPendingRequest = false;
+            $this->userRequestCount = 0;
             return;
         }
 
@@ -39,6 +42,10 @@ class PetDetail extends Component
             ->where('user_id', auth()->id())
             ->whereIn('status', [AdoptionRequest::STATUS_PENDING, AdoptionRequest::STATUS_IN_PROGRESS, AdoptionRequest::STATUS_APPROVED])
             ->exists();
+
+        $this->userRequestCount = auth()->user()->adoptionRequests()
+            ->whereIn('status', [AdoptionRequest::STATUS_PENDING, AdoptionRequest::STATUS_IN_PROGRESS, AdoptionRequest::STATUS_APPROVED])
+            ->count();
     }
 
     public function toggleFavorite(): void
