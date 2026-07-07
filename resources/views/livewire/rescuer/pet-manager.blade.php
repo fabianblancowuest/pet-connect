@@ -36,9 +36,9 @@
                             </div>
                         @endif
                         <div class="absolute right-2 top-2">
-                            <flux:badge size="sm" color="{{ $pet->status === 'available' ? 'emerald' : 'zinc' }}">
+                            <span class="inline-flex items-center rounded-full px-2 py-0.5 text-xs font-semibold {{ $pet->status === 'available' ? 'bg-emerald-600 text-white' : 'bg-zinc-700 text-white dark:bg-zinc-600' }}">
                                 {{ $pet->status === 'available' ? __('Disponible') : __('Adoptada') }}
-                            </flux:badge>
+                            </span>
                         </div>
                     </div>
 
