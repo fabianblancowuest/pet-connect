@@ -17,6 +17,16 @@ class AdoptionRequestPolicy
         return $user->organizations()->pluck('id')->contains($adoptionRequest->organization_id);
     }
 
+    public function receive(User $user, AdoptionRequest $adoptionRequest): bool
+    {
+        return $user->organizations()->pluck('id')->contains($adoptionRequest->organization_id);
+    }
+
+    public function respond(User $user, AdoptionRequest $adoptionRequest): bool
+    {
+        return $user->organizations()->pluck('id')->contains($adoptionRequest->organization_id);
+    }
+
     public function approve(User $user, AdoptionRequest $adoptionRequest): bool
     {
         return $user->organizations()->pluck('id')->contains($adoptionRequest->organization_id);

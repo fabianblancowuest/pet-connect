@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class AdoptionRequest extends Model
 {
     const STATUS_PENDING = 'pending';
+    const STATUS_IN_PROGRESS = 'in_progress';
     const STATUS_APPROVED = 'approved';
     const STATUS_REJECTED = 'rejected';
 
@@ -20,6 +21,7 @@ class AdoptionRequest extends Model
         'organization_id',
         'status',
         'message',
+        'response',
         'notes',
     ];
 

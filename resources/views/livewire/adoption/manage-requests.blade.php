@@ -1,9 +1,10 @@
 <div>
     <div class="mb-6 flex items-center justify-between">
         <flux:heading size="xl" level="1">{{ __('Solicitudes de adopción') }}</flux:heading>
-        <flux:select wire:model.live="statusFilter" class="w-40">
+        <flux:select wire:model.live="statusFilter" class="w-44">
             <option value="">{{ __('Todas') }}</option>
             <option value="pending">{{ __('Pendientes') }}</option>
+            <option value="in_progress">{{ __('En curso') }}</option>
             <option value="approved">{{ __('Aprobadas') }}</option>
             <option value="rejected">{{ __('Rechazadas') }}</option>
         </flux:select>
@@ -41,15 +42,27 @@
                                 </div>
                                 <flux:badge
                                     size="sm"
-                                    color="{{ $request->status === 'pending' ? 'amber' : ($request->status === 'approved' ? 'emerald' : 'red') }}"
+                                    color="{{ $request->status === 'pending' ? 'amber' : ($request->status === 'in_progress' ? 'blue' : ($request->status === 'approved' ? 'emerald' : 'red')) }}"
                                 >
-                                    {{ $request->status === 'pending' ? __('Pendiente') : ($request->status === 'approved' ? __('Aprobada') : __('Rechazada')) }}
+                                    {{ $request->status === 'pending' ? __('Pendiente') : ($request->status === 'in_progress' ? __('En curso') : ($request->status === 'approved' ? __('Aprobada') : __('Rechazada'))) }}
                                 </flux:badge>
                             </div>
 
-                            <p class="mt-2 text-sm text-neutral-600 dark:text-neutral-300">
-                                {{ $request->message }}
-                            </p>
+                            <div class="mt-2 rounded-lg bg-neutral-50 p-3 dark:bg-zinc-700/50">
+                                <flux:text class="text-xs font-medium text-neutral-500 dark:text-neutral-400">{{ __('Mensaje del adoptante') }}</flux:text>
+                                <p class="mt-1 text-sm text-neutral-600 dark:text-neutral-300">
+                                    {{ $request->message }}
+                                </p>
+                            </div>
+
+                            @if ($request->response)
+                                <div class="mt-2 rounded-lg bg-blue-50 p-3 dark:bg-blue-900/20">
+                                    <flux:text class="text-xs font-medium text-blue-600 dark:text-blue-400">{{ __('Tu respuesta') }}</flux:text>
+                                    <p class="mt-1 text-sm text-neutral-600 dark:text-neutral-300">
+                                        {{ $request->response }}
+                                    </p>
+                                </div>
+                            @endif
 
                             <div class="mt-3 flex items-center gap-2 text-xs text-neutral-400">
                                 <span>{{ $request->created_at->isoFormat('LL') }}</span>
@@ -63,12 +76,46 @@
                             @if ($request->status === 'pending')
                                 <div class="mt-3 flex gap-2">
                                     <flux:button
+                                        wire:click="receive({{ $request->id }})"
+                                        variant="primary"
+                                        size="xs"
+                                        wire:confirm="{{ __('¿Recibir esta solicitud?') }}"
+                                        wire:loading.attr="disabled"
+                                    >
+                                        {{ __('Recibir') }}
+                                    </flux:button>
+                                    <flux:button
+                                        wire:click="reject({{ $request->id }})"
+                                        variant="danger"
+                                        size="xs"
+                                        wire:confirm="{{ __('¿Rechazar esta solicitud?') }}"
+                                        wire:loading.attr="disabled"
+                                    >
+                                        {{ __('Rechazar') }}
+                                    </flux:button>
+                                    <flux:button
+                                        wire:click="editNotes({{ $request->id }})"
+                                        variant="ghost"
+                                        size="xs"
+                                    >
+                                        {{ __('Notas') }}
+                                    </flux:button>
+                                </div>
+                            @elseif ($request->status === 'in_progress')
+                                <div class="mt-3 flex gap-2">
+                                    <flux:button
+                                        wire:click="editRespond({{ $request->id }})"
+                                        variant="primary"
+                                        size="xs"
+                                    >
+                                        {{ $request->response ? __('Editar respuesta') : __('Responder') }}
+                                    </flux:button>
+                                    <flux:button
                                         wire:click="approve({{ $request->id }})"
                                         variant="primary"
                                         size="xs"
-                                        wire:confirm="{{ __('¿Aprobar esta solicitud?') }}"
+                                        wire:confirm="{{ __('¿Aprobar esta solicitud? La mascota se marcará como adoptada.') }}"
                                         wire:loading.attr="disabled"
-                                        wire:target="approve({{ $request->id }})"
                                     >
                                         {{ __('Aprobar') }}
                                     </flux:button>
@@ -78,7 +125,6 @@
                                         size="xs"
                                         wire:confirm="{{ __('¿Rechazar esta solicitud?') }}"
                                         wire:loading.attr="disabled"
-                                        wire:target="reject({{ $request->id }})"
                                     >
                                         {{ __('Rechazar') }}
                                     </flux:button>
@@ -93,6 +139,28 @@
                             @endif
                         </div>
                     </div>
+
+                    @if ($respondRequestId === $request->id)
+                        <div class="mt-4 border-t border-neutral-200 pt-4 dark:border-neutral-700">
+                            <form wire:submit="respond({{ $request->id }})" class="flex gap-2">
+                                <flux:textarea
+                                    wire:model="responseText"
+                                    :label="__('Respuesta al adoptante')"
+                                    :placeholder="__('Escribí un mensaje para el adoptante...')"
+                                    rows="3"
+                                    class="flex-1"
+                                />
+                                <div class="flex items-end gap-2">
+                                    <flux:button type="submit" variant="primary" size="sm" wire:loading.attr="disabled">
+                                        {{ __('Enviar') }}
+                                    </flux:button>
+                                    <flux:button wire:click="$set('respondRequestId', null)" variant="ghost" size="sm">
+                                        {{ __('Cerrar') }}
+                                    </flux:button>
+                                </div>
+                            </form>
+                        </div>
+                    @endif
 
                     @if ($selectedRequestId === $request->id)
                         <div class="mt-4 border-t border-neutral-200 pt-4 dark:border-neutral-700">

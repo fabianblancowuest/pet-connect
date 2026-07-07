@@ -27,7 +27,7 @@ class MyRequests extends Component
     {
         $request = AdoptionRequest::where('id', $id)
             ->where('user_id', auth()->id())
-            ->where('status', AdoptionRequest::STATUS_PENDING)
+            ->whereIn('status', [AdoptionRequest::STATUS_PENDING, AdoptionRequest::STATUS_IN_PROGRESS])
             ->firstOrFail();
 
         $request->update(['status' => AdoptionRequest::STATUS_REJECTED]);

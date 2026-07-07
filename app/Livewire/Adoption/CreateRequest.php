@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Adoption;
 
+use App\Models\AdoptionRequest;
 use App\Models\Pet;
 use Flux\Flux;
 use Livewire\Component;
@@ -30,7 +31,7 @@ class CreateRequest extends Component
 
         $existing = auth()->user()->adoptionRequests()
             ->where('pet_id', $this->pet->id)
-            ->whereIn('status', ['pending', 'approved'])
+            ->whereIn('status', [AdoptionRequest::STATUS_PENDING, AdoptionRequest::STATUS_IN_PROGRESS, AdoptionRequest::STATUS_APPROVED])
             ->exists();
 
         if ($existing) {

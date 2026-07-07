@@ -38,20 +38,33 @@
                             </div>
                             <flux:badge
                                 size="sm"
-                                color="{{ $request->status === 'pending' ? 'amber' : ($request->status === 'approved' ? 'emerald' : 'red') }}"
+                                color="{{ $request->status === 'pending' ? 'amber' : ($request->status === 'in_progress' ? 'blue' : ($request->status === 'approved' ? 'emerald' : 'red')) }}"
                             >
-                                {{ $request->status === 'pending' ? __('Pendiente') : ($request->status === 'approved' ? __('Aprobada') : __('Rechazada')) }}
+                                {{ $request->status === 'pending' ? __('Pendiente') : ($request->status === 'in_progress' ? __('En curso') : ($request->status === 'approved' ? __('Aprobada') : __('Rechazada'))) }}
                             </flux:badge>
                         </div>
 
-                        <p class="mt-2 line-clamp-2 text-sm text-neutral-500 dark:text-neutral-400">
-                            {{ $request->message }}
-                        </p>
+                        <div class="mt-2 rounded-lg bg-neutral-50 p-3 dark:bg-zinc-700/50">
+                            <flux:text class="text-xs font-medium text-neutral-500 dark:text-neutral-400">{{ __('Tu mensaje') }}</flux:text>
+                            <p class="mt-1 text-sm text-neutral-600 dark:text-neutral-300">
+                                {{ $request->message }}
+                            </p>
+                        </div>
+
+                        @if ($request->response)
+                            <div class="mt-2 rounded-lg bg-blue-50 p-3 dark:bg-blue-900/20">
+                                <flux:text class="text-xs font-medium text-blue-600 dark:text-blue-400">{{ __('Respuesta del refugio') }}</flux:text>
+                                <p class="mt-1 text-sm text-neutral-600 dark:text-neutral-300">
+                                    {{ $request->response }}
+                                </p>
+                            </div>
+                        @endif
+
                         <div class="mt-2 flex items-center gap-2">
                             <flux:text class="text-xs text-neutral-400">
                                 {{ $request->created_at->isoFormat('LL') }}
                             </flux:text>
-                            @if ($request->status === 'pending')
+                            @if (in_array($request->status, ['pending', 'in_progress']))
                                 <span class="text-neutral-300 dark:text-neutral-600">&middot;</span>
                                 <flux:button
                                     wire:click="cancel({{ $request->id }})"

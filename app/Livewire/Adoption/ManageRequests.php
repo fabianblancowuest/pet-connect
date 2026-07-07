@@ -21,7 +21,11 @@ class ManageRequests extends Component
 
     public string $notes = '';
 
+    public string $responseText = '';
+
     public ?int $selectedRequestId = null;
+
+    public ?int $respondRequestId = null;
 
     protected $queryString = ['statusFilter' => ['except' => '']];
 
@@ -47,6 +51,36 @@ class ManageRequests extends Component
         return view('livewire.adoption.manage-requests', [
             'requests' => $this->requests(),
         ]);
+    }
+
+    public function receive(int $id): void
+    {
+        $request = AdoptionRequest::findOrFail($id);
+        $this->authorize('receive', $request);
+
+        if ($request->status !== AdoptionRequest::STATUS_PENDING) {
+            Flux::toast(variant: 'error', text: __('La solicitud ya fue procesada.'));
+            return;
+        }
+
+        $request->update(['status' => AdoptionRequest::STATUS_IN_PROGRESS]);
+        Flux::toast(variant: 'success', text: __('Solicitud recibida.'));
+    }
+
+    public function respond(int $id): void
+    {
+        $this->validate(['responseText' => 'required|string|min:10|max:2000']);
+
+        $request = AdoptionRequest::findOrFail($id);
+        $this->authorize('respond', $request);
+
+        $request->update([
+            'status' => AdoptionRequest::STATUS_IN_PROGRESS,
+            'response' => $this->responseText,
+        ]);
+
+        $this->reset('respondRequestId', 'responseText');
+        Flux::toast(variant: 'success', text: __('Respuesta enviada al adoptante.'));
     }
 
     public function approve(int $id): void
@@ -85,5 +119,13 @@ class ManageRequests extends Component
         $this->authorize('updateNotes', $request);
         $this->selectedRequestId = $request->id;
         $this->notes = $request->notes ?? '';
+    }
+
+    public function editRespond(int $id): void
+    {
+        $request = AdoptionRequest::findOrFail($id);
+        $this->authorize('respond', $request);
+        $this->respondRequestId = $request->id;
+        $this->responseText = $request->response ?? '';
     }
 }
