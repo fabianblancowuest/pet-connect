@@ -165,6 +165,7 @@ class PetForm extends Component
                 'age_months' => $this->age_months,
                 'size' => $this->size,
                 'color' => $this->color,
+                'sex' => $this->sex,
                 'description' => $this->description,
                 'status' => $this->status,
                 'is_vaccinated' => $this->is_vaccinated,

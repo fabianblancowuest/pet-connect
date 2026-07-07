@@ -37,6 +37,7 @@ class PetFactory extends Factory
             'age_months' => fake()->optional(0.5)->numberBetween(1, 11),
             'size' => fake()->randomElement(['small', 'medium', 'large']),
             'color' => fake()->optional()->safeColorName(),
+            'sex' => fake()->randomElement(['male', 'female']),
             'description' => fake()->paragraphs(2, true),
             'status' => 'available',
             'organization_id' => Organization::factory(),
