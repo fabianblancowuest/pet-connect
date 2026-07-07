@@ -16,7 +16,6 @@ use Livewire\Attributes\Title;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 
-#[Title('Nueva mascota')]
 #[Layout('layouts.app')]
 class PetForm extends Component
 {
@@ -55,6 +54,11 @@ class PetForm extends Component
     public $images = [];
 
     public bool $editing = false;
+
+    public function title(): string
+    {
+        return $this->editing ? __('Editar mascota') : __('Nueva mascota');
+    }
 
     public function mount(?Pet $pet = null): void
     {
