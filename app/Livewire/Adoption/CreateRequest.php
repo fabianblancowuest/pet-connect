@@ -56,6 +56,26 @@ class CreateRequest extends Component
         ];
     }
 
+    public function updatedHasOutdoorSpace(mixed $value): void
+    {
+        $this->has_outdoor_space = $value === '' || $value === null ? null : filter_var($value, FILTER_VALIDATE_BOOLEAN);
+    }
+
+    public function updatedHasOtherPets(mixed $value): void
+    {
+        $this->has_other_pets = $value === '' || $value === null ? null : filter_var($value, FILTER_VALIDATE_BOOLEAN);
+    }
+
+    public function updatedHasChildren(mixed $value): void
+    {
+        $this->has_children = $value === '' || $value === null ? null : filter_var($value, FILTER_VALIDATE_BOOLEAN);
+    }
+
+    public function updatedPreviousExperience(mixed $value): void
+    {
+        $this->previous_experience = $value === '' || $value === null ? null : filter_var($value, FILTER_VALIDATE_BOOLEAN);
+    }
+
     public function submit(): void
     {
         $this->validate();
