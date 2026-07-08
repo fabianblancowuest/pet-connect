@@ -1,14 +1,14 @@
 <div>
     <div class="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <flux:heading size="xl" level="1">{{ __('Mis mascotas') }}</flux:heading>
-        <div class="flex gap-2">
-            <flux:input wire:model.live.debounce.300ms="search" :placeholder="__('Buscar...')" icon="magnifying-glass" class="w-44" />
-            <flux:select wire:model.live="statusFilter" class="w-36">
+        <div class="flex flex-wrap gap-2">
+            <flux:input wire:model.live.debounce.300ms="search" :placeholder="__('Buscar...')" icon="magnifying-glass" class="w-full sm:w-44" />
+            <flux:select wire:model.live="statusFilter" class="w-full sm:w-36">
                 <option value="">{{ __('Todas') }}</option>
                 <option value="available">{{ __('Disponibles') }}</option>
                 <option value="adopted">{{ __('Adoptadas') }}</option>
             </flux:select>
-            <flux:button :href="route('rescuer.pets.create')" variant="primary" icon="plus" wire:navigate>
+            <flux:button :href="route('rescuer.pets.create')" variant="primary" icon="plus" wire:navigate class="w-full sm:w-auto">
                 {{ __('Nueva mascota') }}
             </flux:button>
         </div>

@@ -26,7 +26,7 @@
                 <flux:error name="description" />
             </flux:field>
 
-            <div class="grid grid-cols-2 gap-4">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <flux:field>
                     <flux:label>{{ __('Teléfono') }}</flux:label>
                     <flux:input wire:model="phone" :placeholder="__('+54 11 1234-5678')" required />
@@ -40,7 +40,7 @@
                 </flux:field>
             </div>
 
-            <div class="grid grid-cols-2 gap-4">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <flux:field>
                     <flux:label>{{ __('Dirección') }}</flux:label>
                     <flux:input wire:model="address" :placeholder="__('Calle y número')" required />

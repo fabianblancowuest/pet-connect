@@ -17,7 +17,7 @@
                     <flux:fieldset>
                         <flux:legend>{{ __('Datos personales') }}</flux:legend>
 
-                        <div class="grid grid-cols-2 gap-4">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <flux:field>
                                 <flux:label>{{ __('Fecha de nacimiento') }}</flux:label>
                                 <flux:input wire:model="birth_date" type="date" required />
@@ -36,7 +36,7 @@
                             <flux:error name="address" />
                         </flux:field>
 
-                        <div class="grid grid-cols-2 gap-4">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <flux:field>
                                 <flux:label>{{ __('Localidad') }}</flux:label>
                                 <flux:select wire:model="locality" required>
@@ -57,7 +57,7 @@
                     <flux:fieldset>
                         <flux:legend>{{ __('Tu hogar') }}</flux:legend>
 
-                        <div class="grid grid-cols-2 gap-4">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <flux:field>
                                 <flux:label>{{ __('Tipo de vivienda') }}</flux:label>
                                 <flux:select wire:model="housing_type" required>
@@ -82,7 +82,7 @@
                     <flux:fieldset>
                         <flux:legend>{{ __('Tu hogar') }}</flux:legend>
 
-                        <div class="grid grid-cols-2 gap-4">
+                        <div class="grid grid-cols-1 gap-4">
                             <flux:field>
                                 <flux:label>{{ __('¿Tiene espacio al aire libre?') }}</flux:label>
                                 <flux:select wire:model="has_outdoor_space" required>
@@ -102,7 +102,7 @@
                     <flux:field>
                         <flux:label>{{ __('¿Qué otras mascotas tenés?') }}</flux:label>
                         <flux:text class="mb-2 text-xs text-neutral-400">{{ __('Dejá vacío si no tenés otras mascotas.') }}</flux:text>
-                        <div class="flex flex-wrap gap-4">
+                        <div class="grid grid-cols-2 sm:flex sm:flex-wrap gap-2 sm:gap-4">
                             <flux:checkbox wire:model="other_pets_types" value="dog" :label="__('Perro')" />
                             <flux:checkbox wire:model="other_pets_types" value="cat" :label="__('Gato')" />
                             <flux:checkbox wire:model="other_pets_types" value="rodent" :label="__('Roedor')" />

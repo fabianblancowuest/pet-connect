@@ -94,7 +94,7 @@
 
             <div class="mb-6">
                 <flux:heading level="2" size="lg" class="mb-3">{{ __('Características') }}</flux:heading>
-                <div class="grid grid-cols-2 gap-3">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div class="flex items-center gap-2 text-sm">
                         <flux:icon name="{{ $pet->is_vaccinated ? 'circle-check' : 'circle-x' }}"
                             class="size-5 {{ $pet->is_vaccinated ? 'text-green-500' : 'text-neutral-300 dark:text-neutral-600' }}" />

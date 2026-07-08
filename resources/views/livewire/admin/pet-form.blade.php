@@ -28,7 +28,7 @@
                 <flux:error name="name" />
             </flux:field>
 
-            <div class="grid grid-cols-2 gap-4">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <flux:field>
                     <flux:label>{{ __('Especie') }}</flux:label>
                     <flux:select wire:model.live="species_id" required>
@@ -52,7 +52,7 @@
                 </flux:field>
             </div>
 
-            <div class="grid grid-cols-2 gap-4">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <flux:field>
                     <flux:label>{{ __('Edad (años)') }}</flux:label>
                     <flux:input wire:model="age_years" type="number" min="0" max="50" />
@@ -66,7 +66,7 @@
                 </flux:field>
             </div>
 
-            <div class="grid grid-cols-2 gap-4">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <flux:field>
                     <flux:label>{{ __('Tamaño') }}</flux:label>
                     <flux:select wire:model="size" required>
@@ -94,7 +94,7 @@
                 </flux:field>
             </div>
 
-            <div class="grid grid-cols-2 gap-4">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <flux:field>
                     <flux:label>{{ __('Estado') }}</flux:label>
                     <flux:select wire:model.live="status" required>
@@ -129,7 +129,7 @@
         <flux:fieldset>
             <flux:legend>{{ __('Características') }}</flux:legend>
 
-            <div class="grid grid-cols-2 gap-4">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <flux:checkbox wire:model="is_vaccinated" :label="__('Está vacunado')" />
                 <flux:checkbox wire:model="is_neutered" :label="__('Está esterilizado/castrado')" />
                 <flux:checkbox wire:model="is_house_trained" :label="__('Está educado en casa')" />
@@ -139,7 +139,7 @@
 
             <flux:legend>{{ __('Comportamiento') }}</flux:legend>
 
-            <div class="grid grid-cols-2 gap-4">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <flux:field>
                     <flux:label>{{ __('Se lleva con niños') }}</flux:label>
                     <flux:select wire:model="good_with_kids">
@@ -166,7 +166,7 @@
             @if ($editing && $pet->images->count() > 0)
                 <div class="mb-4">
                     <flux:label>{{ __('Imágenes actuales') }}</flux:label>
-                    <div class="mt-2 grid grid-cols-4 gap-3">
+                    <div class="mt-2 grid grid-cols-2 sm:grid-cols-4 gap-3">
                         @foreach ($pet->images as $image)
                             <div class="group relative aspect-square overflow-hidden rounded-lg bg-neutral-100 dark:bg-zinc-700">
                                 <img src="{{ $image->image_path }}" alt="" class="size-full object-cover" />

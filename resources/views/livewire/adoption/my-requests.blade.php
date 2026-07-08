@@ -50,7 +50,7 @@
                             </flux:badge>
                         </div>
 
-                        <div class="mt-3 grid grid-cols-2 gap-x-6 gap-y-1 text-sm">
+                        <div class="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-1 text-sm">
                             <flux:text class="text-neutral-500 dark:text-neutral-400">
                                 <span class="font-medium">{{ __('Fecha de nacimiento') }}:</span> {{ $request->birth_date ? \Carbon\Carbon::parse($request->birth_date)->isoFormat('DD/MM/YYYY') : '-' }}
                             </flux:text>

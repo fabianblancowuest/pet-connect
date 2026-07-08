@@ -1,7 +1,7 @@
 <div>
-    <div class="mb-6 flex items-center justify-between">
+    <div class="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <flux:heading size="xl" level="1">{{ __('Solicitudes de adopción') }}</flux:heading>
-        <flux:select wire:model.live="statusFilter" class="w-44">
+        <flux:select wire:model.live="statusFilter" class="w-full sm:w-44">
             <option value="">{{ __('Todas') }}</option>
             <option value="pending">{{ __('Pendientes') }}</option>
             <option value="in_progress">{{ __('En curso') }}</option>
@@ -55,7 +55,7 @@
                                 </flux:badge>
                             </div>
 
-                            <div class="mt-3 grid grid-cols-2 gap-x-6 gap-y-1 text-sm">
+                            <div class="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-1 text-sm">
                                 <flux:text class="text-neutral-500 dark:text-neutral-400">
                                     <span class="font-medium">{{ __('Fecha de nacimiento') }}:</span> {{ $request->birth_date ? \Carbon\Carbon::parse($request->birth_date)->isoFormat('DD/MM/YYYY') : '-' }}
                                 </flux:text>
@@ -115,7 +115,7 @@
                             </div>
 
                             @if ($request->status === 'pending')
-                                <div class="mt-3 flex gap-2">
+                                <div class="mt-3 flex flex-wrap gap-2">
                                     <flux:button
                                         wire:click="receive({{ $request->id }})"
                                         variant="primary"
@@ -143,7 +143,7 @@
                                     </flux:button>
                                 </div>
                             @elseif ($request->status === 'in_progress')
-                                <div class="mt-3 flex gap-2">
+                                <div class="mt-3 flex flex-wrap gap-2">
                                     <flux:button
                                         wire:click="editRespond({{ $request->id }})"
                                         variant="primary"

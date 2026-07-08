@@ -22,7 +22,7 @@
                     </span>
                 </a>
 
-                <nav class="flex items-center gap-3">
+                <nav class="flex items-center gap-1 sm:gap-3">
                     <flux:button :href="route('about')" wire:navigate variant="ghost" class="hidden sm:inline-flex">
                         {{ __('Quiénes somos') }}
                     </flux:button>
