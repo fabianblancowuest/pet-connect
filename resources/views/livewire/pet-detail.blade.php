@@ -59,7 +59,7 @@
             <div class="mb-6 flex flex-wrap gap-4 text-sm text-neutral-500 dark:text-neutral-400">
                 @if ($pet->sex)
                     <span class="flex items-center gap-1">
-                        <flux:icon name="{{ $pet->sex === 'male' ? 'mars' : 'venus' }}" class="size-4" />
+                        <flux:icon name="heart" class="size-4" />
                         {{ $pet->sex === 'male' ? __('Macho') : __('Hembra') }}
                     </span>
                 @endif
