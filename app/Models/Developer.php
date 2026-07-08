@@ -3,9 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Developer extends Model
 {
+    use SoftDeletes;
+
     protected $fillable = [
         'name',
         'role',
@@ -13,4 +16,11 @@ class Developer extends Model
         'image',
         'sort_order',
     ];
+
+    protected function casts(): array
+    {
+        return [
+            'sort_order' => 'integer',
+        ];
+    }
 }
