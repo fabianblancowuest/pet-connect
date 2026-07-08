@@ -4,6 +4,7 @@ namespace App\Livewire\Adoption;
 
 use App\Models\AdoptionRequest;
 use App\Models\Pet;
+use App\Services\GeorefService;
 use Flux\Flux;
 use Livewire\Component;
 
@@ -19,6 +20,10 @@ class CreateRequest extends Component
 
     public string $address = '';
 
+    public string $locality = '';
+
+    public string $province = 'Formosa';
+
     public string $housing_type = '';
 
     public ?bool $has_outdoor_space = null;
@@ -29,8 +34,12 @@ class CreateRequest extends Component
 
     public bool $hasPreviousRequests = false;
 
-    public function mount(): void
+    public array $localities = [];
+
+    public function mount(GeorefService $georef): void
     {
+        $this->localities = $georef->getLocalities();
+
         $lastRequest = auth()->user()->adoptionRequests()
             ->whereNotNull('phone')
             ->latest()
@@ -41,6 +50,8 @@ class CreateRequest extends Component
             $this->phone = $lastRequest->phone;
             $this->birth_date = $lastRequest->birth_date ?? '';
             $this->address = $lastRequest->address ?? '';
+            $this->locality = $lastRequest->locality ?? '';
+            $this->province = $lastRequest->province ?? 'Formosa';
             $this->housing_type = $lastRequest->housing_type;
         }
     }
@@ -56,6 +67,7 @@ class CreateRequest extends Component
             'phone' => $personal . '|string|max:50',
             'birth_date' => $personal . '|date|before:today',
             'address' => $personal . '|string|max:255',
+            'locality' => $personal . '|string|max:255',
             'housing_type' => $personal . '|in:house,apartment',
             'has_outdoor_space' => 'required|boolean',
             'other_pets_types' => 'nullable|array',
@@ -71,6 +83,7 @@ class CreateRequest extends Component
             'birth_date.required' => __('La fecha de nacimiento es obligatoria.'),
             'birth_date.before' => __('La fecha de nacimiento debe ser anterior a hoy.'),
             'address.required' => __('La dirección es obligatoria.'),
+            'locality.required' => __('Seleccioná tu localidad.'),
             'housing_type.required' => __('Decinos si vivís en casa o departamento.'),
             'has_outdoor_space.required' => __('Indicá si la mascota tendrá acceso a un espacio al aire libre.'),
             'previous_experience.required' => __('Indicá si tenés experiencia previa con mascotas.'),
@@ -123,6 +136,8 @@ class CreateRequest extends Component
             'phone' => $lastRequest?->phone ?? $this->phone,
             'birth_date' => $lastRequest?->birth_date ?? $this->birth_date,
             'address' => $lastRequest?->address ?? $this->address,
+            'locality' => $lastRequest?->locality ?? $this->locality,
+            'province' => $lastRequest?->province ?? $this->province,
             'housing_type' => $lastRequest?->housing_type ?? $this->housing_type,
             'has_outdoor_space' => $this->has_outdoor_space,
             'has_other_pets' => !empty($this->other_pets_types),
@@ -131,7 +146,7 @@ class CreateRequest extends Component
         ]);
 
         Flux::toast(variant: 'success', text: __('Solicitud enviada con éxito. El refugio se pondrá en contacto.'));
-        $this->reset('message', 'phone', 'birth_date', 'address', 'housing_type', 'has_outdoor_space', 'other_pets_types', 'previous_experience');
+        $this->reset('message', 'phone', 'birth_date', 'address', 'locality', 'housing_type', 'has_outdoor_space', 'other_pets_types', 'previous_experience');
         $this->dispatch('modal-close', name: 'adoption-form');
         $this->dispatch('adoption-request-created');
     }

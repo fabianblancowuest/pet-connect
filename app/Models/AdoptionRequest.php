@@ -25,6 +25,8 @@ class AdoptionRequest extends Model
         'phone',
         'birth_date',
         'address',
+        'locality',
+        'province',
         'housing_type',
         'has_outdoor_space',
         'has_other_pets',

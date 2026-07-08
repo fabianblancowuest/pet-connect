@@ -31,10 +31,27 @@
                         </div>
 
                         <flux:field>
-                            <flux:label>{{ __('Dirección') }}</flux:label>
-                            <flux:input wire:model="address" :placeholder="__('Calle, número, ciudad, provincia')" required />
+                            <flux:label>{{ __('Calle y número') }}</flux:label>
+                            <flux:input wire:model="address" :placeholder="__('Ej: Av. 25 de Mayo 123')" required />
                             <flux:error name="address" />
                         </flux:field>
+
+                        <div class="grid grid-cols-2 gap-4">
+                            <flux:field>
+                                <flux:label>{{ __('Localidad') }}</flux:label>
+                                <flux:select wire:model="locality" required>
+                                    <option value="">{{ __('Seleccionar localidad...') }}</option>
+                                    @foreach ($localities as $name)
+                                        <option value="{{ $name }}">{{ $name }}</option>
+                                    @endforeach
+                                </flux:select>
+                                <flux:error name="locality" />
+                            </flux:field>
+                            <flux:field>
+                                <flux:label>{{ __('Provincia') }}</flux:label>
+                                <flux:input value="Formosa" disabled />
+                            </flux:field>
+                        </div>
                     </flux:fieldset>
 
                     <flux:fieldset>
