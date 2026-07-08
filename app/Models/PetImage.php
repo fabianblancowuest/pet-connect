@@ -13,9 +13,11 @@ class PetImage extends Model
 
     protected static function booted(): void
     {
+        parent::booted();
+
         static::deleting(function (PetImage $image) {
-            $relativePath = str_replace(url('/storage'), '', $image->image_path);
-            $relativePath = ltrim($relativePath, '/');
+            $relativePath = ltrim(parse_url($image->image_path, PHP_URL_PATH) ?? '', '/');
+            $relativePath = preg_replace('#^storage/#', '', $relativePath);
             if (\Illuminate\Support\Facades\Storage::disk('public')->exists($relativePath)) {
                 \Illuminate\Support\Facades\Storage::disk('public')->delete($relativePath);
             }

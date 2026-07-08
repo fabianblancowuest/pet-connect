@@ -86,8 +86,8 @@ class OrganizationSettings extends Component
             $data['logo'] = Storage::url($path);
 
             if ($this->editing && $this->organization->logo) {
-                $oldPath = str_replace(url('/storage'), '', $this->organization->logo);
-                $oldPath = ltrim($oldPath, '/');
+                $oldPath = ltrim(parse_url($this->organization->logo, PHP_URL_PATH) ?? '', '/');
+                $oldPath = preg_replace('#^storage/#', '', $oldPath);
                 if (Storage::disk('public')->exists($oldPath)) {
                     Storage::disk('public')->delete($oldPath);
                 }
@@ -109,8 +109,8 @@ class OrganizationSettings extends Component
     public function removeLogo(): void
     {
         if ($this->editing && $this->organization->logo) {
-            $oldPath = str_replace(url('/storage'), '', $this->organization->logo);
-            $oldPath = ltrim($oldPath, '/');
+            $oldPath = ltrim(parse_url($this->organization->logo, PHP_URL_PATH) ?? '', '/');
+            $oldPath = preg_replace('#^storage/#', '', $oldPath);
             if (Storage::disk('public')->exists($oldPath)) {
                 Storage::disk('public')->delete($oldPath);
             }

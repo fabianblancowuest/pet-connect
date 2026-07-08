@@ -64,8 +64,8 @@ class DeveloperForm extends Component
             $data['image'] = Storage::url($path);
 
             if ($this->editing && $this->developer->image) {
-                $oldPath = str_replace(url('/storage'), '', $this->developer->image);
-                $oldPath = ltrim($oldPath, '/');
+                $oldPath = ltrim(parse_url($this->developer->image, PHP_URL_PATH) ?? '', '/');
+                $oldPath = preg_replace('#^storage/#', '', $oldPath);
                 if (Storage::disk('public')->exists($oldPath)) {
                     Storage::disk('public')->delete($oldPath);
                 }

@@ -14,8 +14,8 @@ class DeveloperManager extends Component
     public function delete(Developer $developer): void
     {
         if ($developer->image) {
-            $oldPath = str_replace(url('/storage'), '', $developer->image);
-            $oldPath = ltrim($oldPath, '/');
+            $oldPath = ltrim(parse_url($developer->image, PHP_URL_PATH) ?? '', '/');
+            $oldPath = preg_replace('#^storage/#', '', $oldPath);
             if (\Storage::disk('public')->exists($oldPath)) {
                 \Storage::disk('public')->delete($oldPath);
             }

@@ -11,11 +11,28 @@ use Livewire\Component;
 #[Layout('layouts.app')]
 class OrganizationManager extends Component
 {
+    public function toggleStatus(Organization $organization): void
+    {
+        $newStatus = match ($organization->status) {
+            'active' => 'inactive',
+            'inactive' => 'active',
+            default => 'active',
+        };
+
+        $organization->update(['status' => $newStatus]);
+        \Flux\Flux::toast(
+            variant: 'success',
+            text: $newStatus === 'active'
+                ? __('Refugio activado.')
+                : __('Refugio desactivado.'),
+        );
+    }
+
     public function delete(Organization $organization): void
     {
         if ($organization->logo) {
-            $oldPath = str_replace(url('/storage'), '', $organization->logo);
-            $oldPath = ltrim($oldPath, '/');
+            $oldPath = ltrim(parse_url($organization->logo, PHP_URL_PATH) ?? '', '/');
+            $oldPath = preg_replace('#^storage/#', '', $oldPath);
             if (\Storage::disk('public')->exists($oldPath)) {
                 \Storage::disk('public')->delete($oldPath);
             }

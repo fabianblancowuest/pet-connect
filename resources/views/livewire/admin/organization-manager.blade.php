@@ -24,8 +24,21 @@
                         <td class="px-4 py-3 text-sm text-zinc-500 dark:text-zinc-400">{{ $organization->user?->name ?? '-' }}</td>
                         <td class="px-4 py-3 text-sm text-zinc-500 dark:text-zinc-400">{{ $organization->city }}, {{ $organization->province }}</td>
                         <td class="px-4 py-3 text-sm">
-                            <span class="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium {{ $organization->status === 'active' ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400' : 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400' }}">
-                                {{ $organization->status === 'active' ? __('Activo') : __('Pendiente') }}
+                            <span class="inline-flex items-center gap-2">
+                                <span class="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium {{
+                                    $organization->status === 'active' ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400' : ($organization->status === 'inactive' ? 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400' : 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400')
+                                }}">
+                                    {{ $organization->status === 'active' ? __('Activo') : ($organization->status === 'inactive' ? __('Inactivo') : __('Pendiente')) }}
+                                </span>
+                                @if ($organization->status !== 'pending')
+                                    <button wire:click="toggleStatus({{ $organization->id }})" class="text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300">
+                                        @if ($organization->status === 'active')
+                                            <flux:icon name="x-mark" class="h-4 w-4" />
+                                        @else
+                                            <flux:icon name="check" class="h-4 w-4" />
+                                        @endif
+                                    </button>
+                                @endif
                             </span>
                         </td>
                         <td class="px-4 py-3 text-right">
