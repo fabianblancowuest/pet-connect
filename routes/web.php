@@ -25,7 +25,7 @@ Route::get('/mascotas', PetCatalog::class)->name('pets.catalog');
 Route::get('/mascotas/{pet:slug}', PetDetail::class)->name('pets.detail');
 
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::view('dashboard', 'dashboard')->name('dashboard');
+    Route::get('dashboard', \App\Livewire\Dashboard::class)->name('dashboard');
 
     Route::prefix('adopciones')->name('adoption.')->group(function () {
         Route::get('/mis-solicitudes', MyRequests::class)->name('my-requests');
