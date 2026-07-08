@@ -22,20 +22,18 @@
                     </span>
                 </a>
 
-                <nav class="flex items-center gap-2 max-sm:flex-wrap max-sm:justify-end">
-                    <flux:button :href="route('about')" wire:navigate variant="ghost" class="hidden sm:inline-flex shrink-0">
+                <!-- Desktop nav -->
+                <nav class="hidden sm:flex items-center gap-2">
+                    <flux:button :href="route('about')" wire:navigate variant="ghost" class="shrink-0">
                         {{ __('Quiénes somos') }}
                     </flux:button>
                     <button
                         type="button"
-                        id="theme-toggle"
                         class="flex size-9 shrink-0 items-center justify-center rounded-lg text-zinc-500 transition-colors hover:bg-zinc-100 hover:text-zinc-700 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-200"
                         onclick="
                             document.documentElement.classList.toggle('dark');
                             localStorage.setItem('flux.appearance', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
-                            this.setAttribute('title', document.documentElement.classList.contains('dark') ? '{{ __('Modo claro') }}' : '{{ __('Modo oscuro') }}');
                         "
-                        title="{{ __('Modo oscuro') }}"
                     >
                         <svg class="size-5 block dark:hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
@@ -64,6 +62,33 @@
                         @endif
                     @endauth
                 </nav>
+
+                <!-- Mobile hamburger -->
+                <div class="flex sm:hidden items-center gap-1" id="mobile-menu-container">
+                    <button
+                        type="button"
+                        class="flex size-9 items-center justify-center rounded-lg text-zinc-500 transition-colors hover:bg-zinc-100 hover:text-zinc-700 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-200"
+                        onclick="
+                            document.documentElement.classList.toggle('dark');
+                            localStorage.setItem('flux.appearance', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+                        "
+                    >
+                        <svg class="size-5 block dark:hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                        </svg>
+                        <svg class="size-5 hidden dark:block" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                        </svg>
+                    </button>
+                    <button onclick="toggleMobileMenu()" type="button" id="mobile-menu-btn" class="flex size-9 items-center justify-center rounded-lg text-zinc-500 transition-colors hover:bg-zinc-100 hover:text-zinc-700 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-200">
+                        <svg id="menu-icon-open" class="size-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+                        </svg>
+                        <svg id="menu-icon-close" class="size-6 hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
             </div>
         </header>
 
@@ -144,6 +169,66 @@
                 </div>
             </section>
         </main>
+
+        <!-- Mobile sidebar overlay -->
+        <div id="mobile-sidebar" class="fixed inset-0 z-50 hidden sm:hidden">
+            <div onclick="toggleMobileMenu()" class="fixed inset-0 bg-black/40 backdrop-blur-sm"></div>
+            <div class="fixed top-0 right-0 bottom-0 w-72 max-w-[85vw] bg-white dark:bg-zinc-900 shadow-2xl">
+                <div class="flex items-center justify-between border-b border-zinc-200 px-5 py-4 dark:border-zinc-800">
+                    <span class="font-semibold text-zinc-900 dark:text-white">{{ __('Menú') }}</span>
+                    <button onclick="toggleMobileMenu()" type="button" class="flex size-8 items-center justify-center rounded-lg text-zinc-400 hover:bg-zinc-100 hover:text-zinc-600 dark:hover:bg-zinc-800 dark:hover:text-zinc-300">
+                        <svg class="size-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+                <nav class="flex flex-col gap-1 p-5">
+                    <a href="{{ route('about') }}" wire:navigate onclick="toggleMobileMenu()"
+                        class="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-zinc-700 transition-colors hover:bg-zinc-100 dark:text-zinc-300 dark:hover:bg-zinc-800">
+                        <flux:icon name="information-circle" class="size-5" />
+                        {{ __('Quiénes somos') }}
+                    </a>
+                    <a href="{{ route('pets.catalog') }}" wire:navigate onclick="toggleMobileMenu()"
+                        class="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-zinc-700 transition-colors hover:bg-zinc-100 dark:text-zinc-300 dark:hover:bg-zinc-800">
+                        <flux:icon name="heart" class="size-5" />
+                        {{ __('Mascotas') }}
+                    </a>
+                    @auth
+                        <hr class="my-2 border-zinc-200 dark:border-zinc-800" />
+                        <a href="{{ route('dashboard') }}" wire:navigate onclick="toggleMobileMenu()"
+                            class="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-zinc-700 transition-colors hover:bg-zinc-100 dark:text-zinc-300 dark:hover:bg-zinc-800">
+                            <flux:icon name="home" class="size-5" />
+                            {{ __('Ir al panel principal') }}
+                        </a>
+                    @else
+                        <hr class="my-2 border-zinc-200 dark:border-zinc-800" />
+                        <a href="{{ route('login') }}" wire:navigate onclick="toggleMobileMenu()"
+                            class="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-emerald-600 transition-colors hover:bg-emerald-50 dark:text-emerald-400 dark:hover:bg-emerald-950/30">
+                            <flux:icon name="arrow-right-start-on-rectangle" class="size-5" />
+                            {{ __('Ingresar') }}
+                        </a>
+                        @if (Route::has('register'))
+                            <a href="{{ route('register') }}" wire:navigate onclick="toggleMobileMenu()"
+                                class="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-700 dark:bg-emerald-500 dark:hover:bg-emerald-600">
+                                <flux:icon name="user-plus" class="size-5" />
+                                {{ __('Registrarse') }}
+                            </a>
+                        @endif
+                    @endauth
+                </nav>
+            </div>
+        </div>
+
+        <script>
+            function toggleMobileMenu() {
+                const sidebar = document.getElementById('mobile-sidebar');
+                const iconOpen = document.getElementById('menu-icon-open');
+                const iconClose = document.getElementById('menu-icon-close');
+                sidebar.classList.toggle('hidden');
+                iconOpen.classList.toggle('hidden');
+                iconClose.classList.toggle('hidden');
+            }
+        </script>
 
         <footer class="border-t border-zinc-200 dark:border-zinc-800">
             <div class="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 px-6 py-8 sm:flex-row">
