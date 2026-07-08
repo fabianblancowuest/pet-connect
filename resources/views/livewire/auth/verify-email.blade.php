@@ -10,6 +10,12 @@
             </flux:text>
         @endif
 
+        @if (config('app.env') === 'local' && config('mail.default') === 'log')
+            <flux:text class="text-center text-xs text-zinc-400">
+                {{ __('Entorno de desarrollo: revisá storage/logs/mail.log para ver los correos.') }}
+            </flux:text>
+        @endif
+
         <div class="flex flex-col items-center justify-between space-y-3">
             <form method="POST" action="{{ route('verification.send') }}">
                 @csrf
