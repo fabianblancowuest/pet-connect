@@ -10,9 +10,9 @@
                         wire:key="adopted-{{ $adopted->id }}"
                         wire:click="redirectToDetail('{{ $adopted->slug }}')">
                         <div class="aspect-[4/3] overflow-hidden bg-neutral-100 dark:bg-zinc-700">
-                            @if ($adopted->primaryImage)
-                                <img src="{{ $adopted->primaryImage->image_path }}" alt="{{ $adopted->name }}"
-                                    class="size-full object-cover transition group-hover:scale-105" />
+                            @if ($adopted->primary_image_path)
+                                <img src="{{ $adopted->primary_image_path }}" alt="{{ $adopted->name }}"
+                                    loading="lazy" class="size-full object-cover transition group-hover:scale-105" />
                             @else
                                 <div class="flex size-full items-center justify-center text-neutral-400">
                                     <flux:icon name="photo" class="size-8" />
@@ -21,7 +21,7 @@
                         </div>
                         <div class="p-3">
                             <flux:text class="block truncate text-sm font-medium">{{ $adopted->name }}</flux:text>
-                            <flux:text class="text-xs text-neutral-400">{{ $adopted->organization->name }}</flux:text>
+                            <flux:text class="text-xs text-neutral-400">{{ $adopted->org_name }}</flux:text>
                         </div>
                         <div class="absolute right-1 top-1">
                             <span class="inline-flex items-center rounded-full bg-emerald-600 px-2 py-0.5 text-xs font-semibold text-white">
@@ -74,9 +74,9 @@
             <div class="group relative overflow-hidden rounded-xl border border-neutral-200 bg-white transition hover:shadow-lg dark:border-neutral-700 dark:bg-zinc-800 cursor-pointer"
                 wire:click="redirectToDetail('{{ $pet->slug }}')" wire:key="pet-{{ $pet->id }}">
                 <div class="aspect-[4/3] overflow-hidden bg-neutral-100 dark:bg-zinc-700">
-                    @if ($pet->primaryImage)
-                        <img src="{{ $pet->primaryImage->image_path }}" alt="{{ $pet->name }}"
-                            class="size-full object-cover transition group-hover:scale-105" />
+                    @if ($pet->primary_image_path)
+                        <img src="{{ $pet->primary_image_path }}" alt="{{ $pet->name }}"
+                            loading="lazy" class="size-full object-cover transition group-hover:scale-105" />
                     @else
                         <div class="flex size-full items-center justify-center text-neutral-400">
                             <flux:icon name="photo" class="size-12" />
@@ -89,7 +89,7 @@
                         <div>
                             <flux:heading class="text-lg font-semibold">{{ $pet->name }}</flux:heading>
                             <flux:text class="text-sm">
-                                {{ $pet->species->name }} · {{ $pet->breed?->name ?? __('Sin raza') }}
+                                {{ $pet->species_name }} · {{ $pet->breed_name ?? __('Sin raza') }}
                             </flux:text>
                         </div>
                         <flux:badge size="sm"
@@ -117,7 +117,7 @@
 
                     <div class="flex items-center justify-between">
                         <flux:text class="text-xs text-neutral-400">
-                            {{ $pet->organization->name }}
+                            {{ $pet->org_name }}
                         </flux:text>
                         <flux:button variant="primary" size="xs" :href="route('pets.detail', $pet)" wire:navigate>
                             {{ __('Ver detalle') }}

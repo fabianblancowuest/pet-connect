@@ -22,7 +22,7 @@ class PetDetail extends Component
     public function mount(Pet $pet): void
     {
         $this->pet = $pet->load([
-            'species', 'breed', 'organization', 'images', 'primaryImage',
+            'species', 'breed', 'organization', 'images', 'primaryImage', 'adoptedBy',
             'favorites' => fn($q) => $q->where('user_id', auth()->id()),
         ]);
 

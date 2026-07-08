@@ -89,6 +89,26 @@ class Pet extends Model
         return $this->hasOne(PetImage::class)->where('is_primary', true);
     }
 
+    public function scopeWithCatalogData($query)
+    {
+        return $query
+            ->select([
+                'pets.*',
+                'species.name as species_name',
+                'species.slug as species_slug',
+                'breeds.name as breed_name',
+                'organizations.name as org_name',
+                'primary_images.image_path as primary_image_path',
+            ])
+            ->leftJoin('species', 'species.id', '=', 'pets.species_id')
+            ->leftJoin('breeds', 'breeds.id', '=', 'pets.breed_id')
+            ->leftJoin('organizations', 'organizations.id', '=', 'pets.organization_id')
+            ->leftJoin('pet_images as primary_images', function ($join) {
+                $join->on('primary_images.pet_id', '=', 'pets.id')
+                    ->where('primary_images.is_primary', true);
+            });
+    }
+
     public function adoptionRequests(): HasMany
     {
         return $this->hasMany(AdoptionRequest::class);

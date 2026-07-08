@@ -65,7 +65,12 @@ class PetCatalog extends Component
 
     public function redirectToDetail(string $slug): void
     {
-        $this->redirect(route('pets.detail', Pet::where('slug', $slug)->firstOrFail()), navigate: true);
+        $this->redirect(route('pets.detail', $slug), navigate: true);
+    }
+
+    public function hasActiveFilters(): bool
+    {
+        return $this->search !== '' || $this->species !== null || $this->size !== null;
     }
 
     #[Computed]
@@ -77,10 +82,13 @@ class PetCatalog extends Component
     #[Computed]
     public function recentlyAdopted()
     {
-        return Pet::query()
-            ->with(['species', 'breed', 'primaryImage', 'organization'])
-            ->where('status', 'adopted')
-            ->latest('updated_at')
+        if ($this->hasActiveFilters()) {
+            return collect();
+        }
+
+        return Pet::withCatalogData()
+            ->where('pets.status', 'adopted')
+            ->latest('pets.updated_at')
             ->take(8)
             ->get();
     }
@@ -88,27 +96,26 @@ class PetCatalog extends Component
     #[Computed]
     public function pets()
     {
-        return Pet::query()
-            ->with(['species', 'breed', 'organization', 'primaryImage'])
+        return Pet::withCatalogData()
             ->when($this->search, function ($query) {
                 $query->where(function ($q) {
-                    $q->where('name', 'like', '%' . $this->search . '%')
-                        ->orWhere('description', 'like', '%' . $this->search . '%');
+                    $q->where('pets.name', 'like', '%' . $this->search . '%')
+                        ->orWhere('pets.description', 'like', '%' . $this->search . '%');
                 });
             })
             ->when($this->species, function ($query) {
-                $query->whereHas('species', fn($q) => $q->where('slug', $this->species));
+                $query->where('species.slug', $this->species);
             })
             ->when($this->size, function ($query) {
-                $query->where('size', $this->size);
+                $query->where('pets.size', $this->size);
             })
             ->when($this->status, function ($query) {
-                $query->where('status', $this->status);
+                $query->where('pets.status', $this->status);
             })
-            ->when($this->sort === 'latest', fn($query) => $query->latest())
-            ->when($this->sort === 'oldest', fn($query) => $query->oldest())
-            ->when($this->sort === 'name', fn($query) => $query->orderBy('name'))
-            ->paginate(12);
+            ->when($this->sort === 'latest', fn($query) => $query->latest('pets.created_at'))
+            ->when($this->sort === 'oldest', fn($query) => $query->oldest('pets.created_at'))
+            ->when($this->sort === 'name', fn($query) => $query->orderBy('pets.name'))
+            ->simplePaginate(12);
     }
 
     public function render()
