@@ -124,21 +124,17 @@ class CreateRequest extends Component
             return;
         }
 
-        $lastRequest = $this->hasPreviousRequests
-            ? auth()->user()->adoptionRequests()->whereNotNull('phone')->latest()->first()
-            : null;
-
         auth()->user()->adoptionRequests()->create([
             'pet_id' => $this->pet->id,
             'organization_id' => $this->pet->organization_id,
             'status' => 'pending',
             'message' => $this->message,
-            'phone' => $lastRequest?->phone ?? $this->phone,
-            'birth_date' => $lastRequest?->birth_date ?? $this->birth_date,
-            'address' => $lastRequest?->address ?? $this->address,
-            'locality' => $lastRequest?->locality ?? $this->locality,
-            'province' => $lastRequest?->province ?? $this->province,
-            'housing_type' => $lastRequest?->housing_type ?? $this->housing_type,
+            'phone' => $this->phone,
+            'birth_date' => $this->birth_date,
+            'address' => $this->address,
+            'locality' => $this->locality,
+            'province' => $this->province,
+            'housing_type' => $this->housing_type,
             'has_outdoor_space' => $this->has_outdoor_space,
             'has_other_pets' => !empty($this->other_pets_types),
             'other_pets_details' => !empty($this->other_pets_types) ? json_encode($this->other_pets_types) : null,

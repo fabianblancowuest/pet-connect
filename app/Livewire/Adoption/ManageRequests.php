@@ -74,10 +74,11 @@ class ManageRequests extends Component
         $request = AdoptionRequest::findOrFail($id);
         $this->authorize('respond', $request);
 
-        $request->update([
-            'status' => AdoptionRequest::STATUS_IN_PROGRESS,
-            'response' => $this->responseText,
-        ]);
+        $updateData = ['response' => $this->responseText];
+        if ($request->status === AdoptionRequest::STATUS_PENDING) {
+            $updateData['status'] = AdoptionRequest::STATUS_IN_PROGRESS;
+        }
+        $request->update($updateData);
 
         $this->reset('respondRequestId', 'responseText');
         Flux::toast(variant: 'success', text: __('Respuesta enviada al adoptante.'));
@@ -88,9 +89,17 @@ class ManageRequests extends Component
         $request = AdoptionRequest::findOrFail($id);
         $this->authorize('approve', $request);
 
+        if ($request->pet->status === Pet::STATUS_ADOPTED) {
+            Flux::toast(variant: 'error', text: __('Esta mascota ya fue adoptada.'));
+            return;
+        }
+
         DB::transaction(function () use ($request) {
             $request->update(['status' => AdoptionRequest::STATUS_APPROVED]);
-            $request->pet->update(['status' => Pet::STATUS_ADOPTED]);
+            $request->pet->update([
+                'status' => Pet::STATUS_ADOPTED,
+                'adopted_by_user_id' => $request->user_id,
+            ]);
         });
 
         Flux::toast(variant: 'success', text: __('Solicitud aprobada.'));

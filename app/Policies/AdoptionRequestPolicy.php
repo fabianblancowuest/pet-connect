@@ -7,6 +7,11 @@ use App\Models\User;
 
 class AdoptionRequestPolicy
 {
+    public function create(User $user): bool
+    {
+        return $user->role !== 'admin';
+    }
+
     public function viewAny(User $user): bool
     {
         return $user->organizations()->exists();
