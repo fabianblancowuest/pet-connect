@@ -4,5 +4,9 @@
     "of": "de",
     "results": "resultados",
     "Pagination Navigation": "Navegación del paginado",
-    "Go to page :page": "Ir a la página :page"
+    "Go to page :page": "Ir a la página :page",
+    "Choose file": "Elegir archivo",
+    "Choose files": "Elegir archivos",
+    "No file chosen": "Ningún archivo seleccionado",
+    "files": "archivos"
 }
