@@ -22,14 +22,14 @@
                     </span>
                 </a>
 
-                <nav class="flex items-center gap-3">
-                    <flux:button :href="route('about')" wire:navigate variant="ghost" class="hidden sm:inline-flex">
+                <nav class="flex items-center gap-2 overflow-x-auto [-webkit-overflow-scrolling:touch]">
+                    <flux:button :href="route('about')" wire:navigate variant="ghost" class="hidden sm:inline-flex shrink-0">
                         {{ __('Quiénes somos') }}
                     </flux:button>
                     <button
                         type="button"
                         id="theme-toggle"
-                        class="flex size-9 items-center justify-center rounded-lg text-zinc-500 transition-colors hover:bg-zinc-100 hover:text-zinc-700 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-200"
+                        class="flex size-9 shrink-0 items-center justify-center rounded-lg text-zinc-500 transition-colors hover:bg-zinc-100 hover:text-zinc-700 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-200"
                         onclick="
                             document.documentElement.classList.toggle('dark');
                             localStorage.setItem('flux.appearance', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
@@ -45,20 +45,20 @@
                         </svg>
                     </button>
 
-                    <flux:button :href="route('pets.catalog')" wire:navigate variant="ghost">
+                    <flux:button :href="route('pets.catalog')" wire:navigate variant="ghost" class="shrink-0">
                         {{ __('Mascotas') }}
                     </flux:button>
 
                     @auth
-                        <flux:button :href="route('dashboard')" wire:navigate variant="primary">
+                        <flux:button :href="route('dashboard')" wire:navigate variant="primary" class="shrink-0">
                             {{ __('Ir al panel principal') }}
                         </flux:button>
                     @else
-                        <flux:button :href="route('login')" wire:navigate variant="ghost">
+                        <flux:button :href="route('login')" wire:navigate variant="ghost" class="shrink-0">
                             {{ __('Ingresar') }}
                         </flux:button>
                         @if (Route::has('register'))
-                            <flux:button :href="route('register')" wire:navigate variant="primary">
+                            <flux:button :href="route('register')" wire:navigate variant="primary" class="shrink-0">
                                 {{ __('Registrarse') }}
                             </flux:button>
                         @endif
