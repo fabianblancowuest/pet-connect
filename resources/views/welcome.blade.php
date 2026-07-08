@@ -22,7 +22,7 @@
                     </span>
                 </a>
 
-                <nav class="flex items-center gap-2 overflow-x-auto [-webkit-overflow-scrolling:touch]">
+                <nav class="flex items-center gap-2 max-sm:flex-wrap max-sm:justify-end">
                     <flux:button :href="route('about')" wire:navigate variant="ghost" class="hidden sm:inline-flex shrink-0">
                         {{ __('Quiénes somos') }}
                     </flux:button>
