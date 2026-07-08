@@ -20,7 +20,7 @@ class PetFactory extends Factory
         $species = Species::inRandomOrder()->first();
 
         if (!$species) {
-            $species = (object) ['id' => fake()->randomElement([1, 2])];
+            $species = Species::firstOrCreate(['slug' => 'perro'], ['name' => 'Perro']);
         }
 
         $name = fake()->firstName();
@@ -59,7 +59,7 @@ class PetFactory extends Factory
     {
         return $this->state(function (array $attrs) {
             static $speciesId = null;
-            $speciesId ??= Species::where('slug', 'perro')->first()?->id ?? 1;
+            $speciesId ??= Species::firstOrCreate(['slug' => 'perro'], ['name' => 'Perro'])->id;
 
             return ['species_id' => $speciesId];
         });
@@ -69,7 +69,7 @@ class PetFactory extends Factory
     {
         return $this->state(function (array $attrs) {
             static $speciesId = null;
-            $speciesId ??= Species::where('slug', 'gato')->first()?->id ?? 2;
+            $speciesId ??= Species::firstOrCreate(['slug' => 'gato'], ['name' => 'Gato'])->id;
 
             return ['species_id' => $speciesId];
         });

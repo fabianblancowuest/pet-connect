@@ -8,6 +8,7 @@ use App\Models\Organization;
 use App\Models\Pet;
 use App\Models\User;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 
 class DemoDataSeeder extends Seeder
 {
@@ -36,11 +37,19 @@ class DemoDataSeeder extends Seeder
 
     public function run(): void
     {
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-            'role' => 'adopter',
-        ]);
+        $adopters = [
+            ['name' => 'Sixto Servian', 'email' => 'sixto@gmail.com'],
+            ['name' => 'Abraham Fernandez', 'email' => 'abraham@gmail.com'],
+            ['name' => 'Fabian Blanco Wuest', 'email' => 'fabian@gmail.com'],
+        ];
+
+        foreach ($adopters as $adopter) {
+            User::factory()->create([
+                ...$adopter,
+                'role' => 'adopter',
+                'password' => Hash::make('password1234'),
+            ]);
+        }
 
         User::factory()->create([
             'name' => 'Admin',
@@ -48,54 +57,88 @@ class DemoDataSeeder extends Seeder
             'role' => 'admin',
         ]);
 
-        $rescuer = User::factory()->create([
-            'name' => 'Refugio Huellitas',
-            'email' => 'rescuer@example.com',
-            'role' => 'rescuer',
-        ]);
+        $refugios = [
+            [
+                'name' => 'Huellitas Formosa',
+                'email' => 'huellitasfsa@gmail.com',
+                'org' => 'Huellitas Formosa',
+                'slug' => 'huellitas-formosa',
+                'description' => 'En Huellitas Formosa trabajamos día a día para rescatar, rehabilitar y encontrar hogares responsables para perros y gatos en situación de calle. Contamos con un equipo de voluntarios comprometidos y un espacio de tránsito donde brindamos amor y cuidados veterinarios a cada animalito que llega a nosotros.',
+                'phone' => '+54370 4' . fake()->randomNumber(6, true),
+                'address' => 'Córdoba 2030',
+            ],
+            [
+                'name' => 'Patitas Formosa',
+                'email' => 'patitasfsa@gmail.com',
+                'org' => 'Patitas Formosa',
+                'slug' => 'patitas-formosa',
+                'description' => 'Patitas Formosa es una organización sin fines de lucro dedicada a la protección animal. Realizamos jornadas de castración, vacunación y concientización sobre la tenencia responsable. Nuestro refugio temporal alberga mascotas rescatadas hasta que encuentran una familia que les brinde el amor que merecen.',
+                'phone' => '+54370 4' . fake()->randomNumber(6, true),
+                'address' => 'Salta 316',
+            ],
+            [
+                'name' => 'Narices Frías',
+                'email' => 'naricesfrias@gmail.com',
+                'org' => 'Narices Frías',
+                'slug' => 'narices-frias',
+                'description' => 'Narices Frías nació del amor por los animales y las ganas de cambiar realidades. Rescatamos animales abandonados, maltratados o en riesgo, los rehabilitamos física y emocionalmente, y promovemos su adopción responsable. Creemos en un mundo donde cada mascota tenga un hogar lleno de cariño.',
+                'phone' => '+54370 4' . fake()->randomNumber(6, true),
+                'address' => 'Moreno 215',
+            ],
+        ];
 
-        $org = Organization::factory()->create([
-            'user_id' => $rescuer->id,
-            'name' => 'Huellitas Refugio',
-            'slug' => 'huellitas-refugio',
-            'city' => 'Formosa',
-            'province' => 'Formosa',
-        ]);
+        $petIndex = 0;
+        $firstOrg = null;
 
-        $dogSmall = Pet::factory()->dog()->small()->withImages(3)->count(4)->create([
-            'organization_id' => $org->id,
-            'user_id' => $rescuer->id,
-        ]);
+        foreach ($refugios as $data) {
+            $rescuer = User::factory()->create([
+                'name' => $data['name'],
+                'email' => $data['email'],
+                'role' => 'rescuer',
+                'password' => Hash::make('refugio1234'),
+            ]);
 
-        $dogMedium = Pet::factory()->dog()->medium()->withImages(3)->count(3)->create([
-            'organization_id' => $org->id,
-            'user_id' => $rescuer->id,
-        ]);
+            $org = Organization::factory()->create([
+                'user_id' => $rescuer->id,
+                'name' => $data['org'],
+                'slug' => $data['slug'],
+                'description' => $data['description'],
+                'phone' => $data['phone'],
+                'address' => $data['address'],
+                'city' => 'Formosa',
+                'province' => 'Formosa',
+            ]);
 
-        $dogLarge = Pet::factory()->dog()->large()->withImages(3)->count(2)->create([
-            'organization_id' => $org->id,
-            'user_id' => $rescuer->id,
-        ]);
+            if ($firstOrg === null) {
+                $firstOrg = $org;
+            }
 
-        $catSmall = Pet::factory()->cat()->small()->withImages(3)->count(3)->create([
-            'organization_id' => $org->id,
-            'user_id' => $rescuer->id,
-        ]);
+            $dogSmall = Pet::factory()->dog()->small()->withImages(3)->count(2)->create([
+                'organization_id' => $org->id,
+                'user_id' => $rescuer->id,
+            ]);
 
-        $catMedium = Pet::factory()->cat()->medium()->withImages(3)->count(2)->create([
-            'organization_id' => $org->id,
-            'user_id' => $rescuer->id,
-        ]);
+            $dogMedium = Pet::factory()->dog()->medium()->withImages(3)->count(2)->create([
+                'organization_id' => $org->id,
+                'user_id' => $rescuer->id,
+            ]);
 
-        $adopted = Pet::factory()->adopted()->withImages(2)->count(3)->create([
-            'organization_id' => $org->id,
-            'user_id' => $rescuer->id,
-        ]);
+            $dogLarge = Pet::factory()->dog()->large()->withImages(3)->count(1)->create([
+                'organization_id' => $org->id,
+                'user_id' => $rescuer->id,
+            ]);
 
-        $allPets = $dogSmall->merge($dogMedium)->merge($dogLarge)->merge($catSmall)->merge($catMedium)->merge($adopted);
+            $catSmall = Pet::factory()->cat()->small()->withImages(3)->count(1)->create([
+                'organization_id' => $org->id,
+                'user_id' => $rescuer->id,
+            ]);
 
-        foreach ($allPets as $i => $pet) {
-            $pet->update(['description' => $this->descriptions[$i % count($this->descriptions)]]);
+            $pets = $dogSmall->merge($dogMedium)->merge($dogLarge)->merge($catSmall);
+
+            foreach ($pets as $pet) {
+                $pet->update(['description' => $this->descriptions[$petIndex % count($this->descriptions)]]);
+                $petIndex++;
+            }
         }
 
         Developer::create([
@@ -119,14 +162,14 @@ class DemoDataSeeder extends Seeder
             'sort_order' => 3,
         ]);
 
-        $adopter = User::where('email', 'test@example.com')->first();
-        $availablePets = Pet::where('organization_id', $org->id)->where('status', 'available')->take(2)->get();
+        $adopter = User::where('email', 'sixto@gmail.com')->first();
+        $availablePets = Pet::where('organization_id', $firstOrg->id)->where('status', 'available')->take(2)->get();
 
         foreach ($availablePets as $pet) {
             AdoptionRequest::create([
                 'pet_id' => $pet->id,
                 'user_id' => $adopter->id,
-                'organization_id' => $org->id,
+                'organization_id' => $firstOrg->id,
                 'status' => AdoptionRequest::STATUS_PENDING,
                 'phone' => '+54 370 123-4567',
                 'birth_date' => '1995-03-15',

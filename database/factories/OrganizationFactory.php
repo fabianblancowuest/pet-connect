@@ -21,7 +21,7 @@ class OrganizationFactory extends Factory
             'address' => fake()->address(),
             'city' => fake()->city(),
             'province' => fake()->state(),
-            'status' => 'approved',
+            'status' => 'active',
         ];
     }
 }
