@@ -2,18 +2,19 @@
 
 ## Arquitectura General
 
-**Monolítica MVC con Livewire** — No hay API REST ni SPA. Todo se renderiza del lado del servidor.
+**Monolítica MVC con Livewire** — No hay API REST ni SPA. Todo se renderiza del lado del servidor. Consume una API externa (Georef) para datos geográficos.
 
 ```
 Navegador → Ruta (web.php) → Livewire Component → Eloquent Model → SQLite
-                                 ↓
-                         Blade View (HTML)
+                                 ↓                          ↕
+                         Blade View (HTML)         GeorefService → API Georef (Argentina)
 ```
 
 - **Laravel 13** actúa como framework backend.
 - **Livewire 4** reemplaza a los controladores tradicionales: cada ruta apunta a un componente Livewire que maneja estado y renderiza su propia vista Blade.
 - **Alpine.js** (incluido con Flux UI) maneja interactividad liviana del lado del cliente.
 - **Vite 8** compila los assets (CSS y JS).
+- **API Georef** (https://apis.datos.gob.ar/georef/api) — API pública del gobierno argentino para datos geográficos. Se consume desde `GeorefService` con caché de 24hs vía `Cache::remember()`.
 
 ---
 
@@ -29,6 +30,8 @@ Navegador → Ruta (web.php) → Livewire Component → Eloquent Model → SQLit
 | Livewire | ^4.1 | Framework full-stack para UI dinámica (reemplaza controladores tradicionales) |
 | Flux UI | ^2.13 | Biblioteca de componentes UI para Livewire |
 | Laravel Tinker | ^3.0 | REPL interactivo |
+| **API Georef** (externa) | — | API del gobierno argentino para localidades y provincias |
+| **Laravel HTTP Client** | (integrado) | Consumo de la API Georef con caché de 24hs |
 
 ### Frontend
 
@@ -81,7 +84,8 @@ Navegador → Ruta (web.php) → Livewire Component → Eloquent Model → SQLit
 │   │   └── PetDetail.php     — Detalle de mascota
 │   ├── Models/               — ★ Modelos Eloquent (9 modelos)
 │   ├── Policies/             — Políticas de autorización
-│   └── Providers/            — Service providers
+│   ├── Providers/            — Service providers
+│   └── Services/             — ★ Servicios externos (GeorefService: API de localidades argentinas)
 ├── bootstrap/                — Bootstrap de Laravel
 ├── config/                   — ★ Configuración de la aplicación
 ├── database/
@@ -110,6 +114,8 @@ Navegador → Ruta (web.php) → Livewire Component → Eloquent Model → SQLit
 ---
 
 ## Base de Datos (16 tablas)
+
+Columnas adicionales en `adoption_requests`: `locality`, `province`
 
 ```
 users ──1:N──> organizations
@@ -190,7 +196,7 @@ Soft deletes en: `pets`, `organizations`, `adoption_requests`
 ## Funcionalidades Clave
 
 - **Catálogo público** con búsqueda y filtros (especie, tamaño, ordenamiento)
-- **Sistema de adopción**: flujo pendiente → en_progreso → aprobado/rechazado con comunicación entre adoptante y rescatista
+- **Sistema de adopción**: flujo pendiente → en_progreso → aprobado/rechazado con comunicación entre adoptante y rescatista. En el formulario de solicitud se seleccionan localidades de Formosa desde la API Georef.
 - **Autenticación completa**: registro, login, verificación email, reseteo de contraseña, 2FA (TOTP), passkeys (WebAuthn)
 - **Favoritos**: los adoptantes pueden guardar mascotas
 - **Internacionalización**: interfaz completamente en español
